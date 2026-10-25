@@ -18,6 +18,7 @@ from ..config import Config
 from ..packing.grid import grid_packing
 from ..validation.packing_validator import validate_packing_geometry
 from ..validation.score import puzzle_score
+from ..storage.solution_store import SolutionStore
 from .annealing import simulated_annealing
 from .local_search import local_refinement
 from .restart import multi_start_optimize, RestartResult
@@ -46,6 +47,9 @@ def solve_puzzle(
 ) -> SolverResult:
     """Solve a single puzzle, returning the best validated solution.
 
+    Warm-starts from the stored incumbent if available, and searches
+    for strictly smaller containers.
+
     Args:
         n: puzzle size.
         config: project configuration.
@@ -71,10 +75,23 @@ def solve_puzzle(
         result.score = vr.score
         result.valid = True
         result.strategy = "grid"
-
     if not use_optimization or n == 1:
         result.runtime_seconds = time.time() - start
         return result
+
+    # Check if there is an existing better incumbent in SolutionStore
+    incumbent = None
+    if config.solutions_dir.exists():
+        store = SolutionStore(config.solutions_dir)
+        cand_sq = store.load_squares(n)
+        if cand_sq is not None:
+            vr_inc = validate_packing_geometry(cand_sq, n, tolerance=config.sat_tolerance)
+            if vr_inc.valid and vr_inc.container_length <= result.container_length:
+                incumbent = cand_sq.copy()
+                result.squares = incumbent.copy()
+                result.container_length = vr_inc.container_length
+                result.score = vr_inc.score
+                result.strategy = "incumbent"
 
     # Run optimization
     sa_kwargs = dict(
@@ -104,6 +121,7 @@ def solve_puzzle(
         refine=True,
         refine_kwargs=refine_kwargs,
         tolerance=config.sat_tolerance,
+        incumbent=incumbent,
     )
 
     result.iterations = rr.total_iterations

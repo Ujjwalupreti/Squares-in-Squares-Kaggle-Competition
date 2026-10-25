@@ -1,0 +1,27 @@
+# Fast configuration for smoke tests and rapid verification
+
+# Puzzle range
+n_min: 1
+n_max: 10
+
+# Optimization parameters
+sa_initial_temp: 1.0
+sa_cooling_rate: 0.99
+sa_min_temp: 1.0e-4
+sa_max_iterations: 1000
+sa_time_limit_seconds: 1.0
+num_restarts: 1
+
+# Move parameters
+translate_step: 0.05
+rotate_step: 0.05
+move_decay: 0.99
+
+# Overlap penalty weight
+overlap_lambda: 1000.0
+
+# Validation tolerance
+sat_tolerance: 1.0e-9
+
+# Reproducibility
+random_seed: 42

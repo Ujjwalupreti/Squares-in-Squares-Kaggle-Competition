@@ -1,0 +1,27 @@
+# Default configuration for Squares in Squares packing optimizer
+
+# Puzzle range
+n_min: 1
+n_max: 1000
+
+# Optimization parameters
+sa_initial_temp: 1.0
+sa_cooling_rate: 0.9999
+sa_min_temp: 1.0e-6
+sa_max_iterations: 50000
+sa_time_limit_seconds: 30.0
+num_restarts: 3
+
+# Move parameters
+translate_step: 0.1
+rotate_step: 0.1
+move_decay: 0.9995
+
+# Overlap penalty weight
+overlap_lambda: 1000.0
+
+# Validation tolerance
+sat_tolerance: 1.0e-9
+
+# Reproducibility
+random_seed: 42

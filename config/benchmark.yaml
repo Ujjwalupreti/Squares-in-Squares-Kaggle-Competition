@@ -1,0 +1,27 @@
+# Benchmark configuration for small puzzle evaluation (n=2..30)
+
+# Puzzle range
+n_min: 2
+n_max: 30
+
+# Optimization parameters
+sa_initial_temp: 1.0
+sa_cooling_rate: 0.999
+sa_min_temp: 1.0e-5
+sa_max_iterations: 10000
+sa_time_limit_seconds: 5.0
+num_restarts: 2
+
+# Move parameters
+translate_step: 0.08
+rotate_step: 0.08
+move_decay: 0.999
+
+# Overlap penalty weight
+overlap_lambda: 1000.0
+
+# Validation tolerance
+sat_tolerance: 1.0e-9
+
+# Reproducibility
+random_seed: 42
