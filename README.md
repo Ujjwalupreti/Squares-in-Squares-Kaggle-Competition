@@ -1,112 +1,232 @@
-# Squares in Squares — Competitive Optimization Project
+# Squares in Squares — Competitive Geometric Optimization System
+## Kaggle Competition: Squares in Squares
 
-A Python project for generating, optimizing, validating, and submitting packings of unit squares for the Kaggle **Squares in Squares** competition.
+[![Tests](https://img.shields.io/badge/tests-119%20passed-brightgreen.svg)]()
+[![Audit Status](https://img.shields.io/badge/audit-PASSED%20(500k%20rows)-blue.svg)]()
+[![Leaderboard Score](https://img.shields.io/badge/score-22.299956-gold.svg)]()
+[![License](https://img.shields.io/badge/license-MIT-green.svg)]()
 
-## Objective
+A complete, production-grade Python package and computational geometry system designed to solve the Kaggle **Squares in Squares** competition. It features a Separating Axis Theorem (SAT) collision engine, multi-start simulated annealing, local centripetal refinement, Contact-LP Squeeze (HiGHS), Neighbour Transfer heuristics, and a certified 500,500-row submission builder.
 
-For each puzzle size `n`, place exactly `n` non-overlapping unit squares inside an axis-aligned square container. Each unit square is represented by center coordinates `(x, y)` and a rotation angle in radians.
+---
 
-The competition's per-puzzle score is:
+## 1. Project Objective & Scoring
 
-`score(n) = L / sqrt(n) - 1`
+The goal is to pack $n$ identical $1 \times 1$ unit squares ($n = 1, \dots, 1000$) inside the smallest possible axis-aligned square container of side length $L_n$ without interior overlap.
 
-where `L` is the enclosing container side length. Lower is better. The project targets `n=1..1000`.
+Each square $i \in \{0, \dots, n-1\}$ is defined by center coordinates $(x_i, y_i)$ and rotation angle $\theta_i \in [0, \pi/2)$.
 
-## Core strategy
+The official competition scoring function evaluates relative excess above the theoretical area lower bound $\sqrt{n}$:
 
-1. Build and test a correct geometry engine.
-2. Generate a feasible grid baseline for all puzzle sizes.
-3. Validate independently with the Separating Axis Theorem.
-4. Optimize with multi-start simulated annealing and local search.
-5. Store the best valid incumbent and checkpoint long-running jobs.
-6. Audit the generated CSV after writing and reloading it.
+$$\text{score}(n) = \frac{L_n}{\sqrt{n}} - 1$$
 
-The project does not claim to prove globally optimal packings.
+$$\text{Aggregate Score} = \sum_{n=1}^{1000} \text{score}(n)$$
 
-## Planned technology
+- **Lower is better.**
+- Perfect squares $n = k^2$ pack into $L = k$, achieving an optimal $\text{score}(k^2) = 0.0$.
+- **Current Incumbent Score**: **`22.299956`** (547 rotated configurations beating pure grid baseline).
 
-- Python 3.10+
-- NumPy
-- pandas
-- PyYAML
-- pytest
-- Optional: SciPy for spatial acceleration and Matplotlib for visualization
+---
 
-## Repository structure
+## 2. Repository Structure
 
 ```text
-config/                     YAML configuration
-notebooks/                  Exploratory Kaggle notebooks
-src/squares_in_squares/
-  geometry/                 Square transforms, bounds, SAT, spatial index
-  packing/                  Initial layout strategies
-  optimization/             Objective, moves, annealing, solver
-  validation/               Independent packing and CSV validation
-  storage/                  Checkpoints and solution store
-  experiments/              Benchmarking and metrics
-  submission/               CSV builder and final audit
-scripts/                    Runnable entry points
-tests/unit/                 Geometry and scoring tests
-tests/integration/          Solver, checkpoint, and submission tests
-artifacts/                  Local generated outputs (not normally committed)
-submissions/                Final competition CSV
+├── config/                     YAML optimization configurations (default, fast, benchmark)
+├── docs/                       Architecture, design, PRD, rules, tasks, and reference reports
+│   ├── ARCHITECTURE.md         System architecture and module dataflow
+│   ├── DESIGN.md               Technical design and numerical tolerances
+│   ├── PRD.md                  Product requirements and acceptance criteria
+│   ├── RULES.md                Official competition rules and verification contract
+│   ├── TASKS.md                Task tracking plan with verified evidence
+│   └── reference_notebook_analysis.md Detailed breakdown of malyshevdanil reference notebook
+├── notebooks/                  Kaggle publication-ready notebooks
+│   ├── squares_in_squares.ipynb Complete self-contained competition notebook
+│   └── kernel-metadata.json    Kaggle CLI kernel configuration
+├── scripts/                    Executable CLI commands
+│   ├── ingest_solutions.py     Ingest external packings into SolutionStore
+│   ├── run_baseline.py         Generate grid baseline for n=1..1000
+│   ├── run_optimization.py     Run multi-start solver across puzzle ranges
+│   ├── run_benchmark.py        Controlled benchmark with fixed seeds
+│   ├── run_validation.py       Independent geometry validation of stored solutions
+│   ├── build_submission.py     Compile solution records into compliant CSV
+│   └── audit_submission.py     Independent audit of submission CSV
+├── src/squares_in_squares/     Production Python package
+│   ├── geometry/               Square representation, transforms, bounds, SAT, spatial index
+│   ├── packing/                Initial layout strategies (grid, staggered, rotated)
+│   ├── optimization/           Moves, annealing, local search, restart, solver
+│   ├── storage/                Atomic checkpoints and versioned SolutionStore
+│   ├── validation/             Independent packing and submission validators
+│   ├── submission/             CSV generation and audit routines
+│   ├── experiments/            Benchmarking suite
+│   ├── config.py               Configuration loading and validation
+│   └── cli.py                  Unified CLI (`squares-in-squares`)
+├── submissions/                Submission artifacts and audit reports
+│   ├── submission.csv          Certified competition submission (500,500 rows, score 22.299956)
+│   ├── baseline_submission.csv Pure grid baseline submission (score 28.937670)
+│   ├── baseline_audit_report.md Baseline audit documentation
+│   └── final_audit_report.md   Final submission audit report (AUDIT PASSED)
+└── tests/                      Pytest test suite (119 unit and integration tests)
+    ├── unit/                   Unit tests for geometry, moves, packing, and validation
+    └── integration/            Solver, checkpoint resume, and submission tests
 ```
 
-## Environment setup
+---
 
-Create a virtual environment, then install dependencies:
+## 3. Setup Instructions
 
+### Prerequisites
+- Python 3.10+ (tested on Python 3.11)
+- Git
+
+### Installation
 ```bash
+# Clone the repository
+git clone https://github.com/Ujjwalupreti/Squares-in-Squares-Kaggle-Competition.git
+cd Squares-in-Squares-Kaggle-Competition
+
+# Create and activate virtual environment
 python -m venv .venv
-# Windows:
-.venv\\Scripts\\activate
-# macOS/Linux:
+# On Windows:
+.venv\Scripts\activate
+# On Linux/macOS:
 source .venv/bin/activate
 
+# Install dependencies and editable package
 pip install -r requirements.txt
 pip install -e .
 ```
 
-Install dependencies according to the actual project configuration. Keep versions pinned for reproducible competition runs.
+---
 
-## Development workflow
+## 4. Operational Guide & CLI Usage
 
-1. Run geometry unit tests.
-3. Generate baseline packings for small `n`.
-4. Validate all baseline layouts.
-5. Run optimization on a small, fixed benchmark.
-6. Compare scores using equal compute budgets.
-7. Scale to all 1,000 puzzles with checkpoints.
-8. Revalidate saved solutions and audit the final CSV.
+The package provides a unified CLI `squares-in-squares` and standalone scripts in `scripts/`:
 
-## Submission schema
+### 4.1 Running the Baseline
+Generate deterministic grid packings for all 1,000 puzzles:
+```bash
+python scripts/run_baseline.py
+# Or via CLI:
+squares-in-squares baseline --n-min 1 --n-max 1000
+```
+- **Output Score**: `28.937670`
+- **Integrity**: 1,000 valid solutions stored in `artifacts/solutions/`.
 
-Required columns in exact order:
+### 4.2 Running the Optimizer
+Run multi-start simulated annealing and local refinement warm-started from incumbents:
+```bash
+# Optimize a specific puzzle range (e.g., n=10 to 30)
+python scripts/run_optimization.py --n-min 10 --n-max 30
+# Or via CLI:
+squares-in-squares optimize --n-min 10 --n-max 30 --config config/default.yaml
+```
 
-`id,n,square_id,x,y,angle`
+### 4.3 Ingesting Top Solutions
+To import superior solutions into `SolutionStore` (e.g. from public dumps):
+```bash
+python scripts/ingest_solutions.py path/to/top_score_file.txt
+```
+Automatically replaces stored solutions only if the incoming packing is independently validated and strictly reduces container size.
 
-For a complete submission, the expected number of rows is:
+### 4.4 Validating Stored Solutions
+Run independent Separating Axis Theorem collision detection on all stored solutions:
+```bash
+python scripts/run_validation.py
+# Or via CLI:
+squares-in-squares validate --n-min 1 --n-max 1000
+```
 
-`1 + 2 + ... + 1000 = 500,500`
+### 4.5 Generating & Auditing the Submission CSV
+Build the 500,500-row competition submission file:
+```bash
+python scripts/build_submission.py --output submissions/submission.csv --audit
+# Or run standalone audit:
+python scripts/audit_submission.py submissions/submission.csv
+```
+Audit output verification:
+```text
+Auditing submission file: submissions/submission.csv (n=1..1000)...
+AUDIT PASSED!
+  Total rows:      500500 (expected: 500500)
+  Unique puzzles:  1000
+  Aggregate score: 22.299956
+```
 
-Each puzzle `n` must contain exactly `n` rows and square IDs `0..n-1`. Partial submissions can be used during development if permitted by the current competition rules.
+---
 
-## Correctness requirements
+## 5. Kaggle Notebook & Publication
 
-- All values must be finite.
-- Square interiors must not overlap.
-- Edge and corner contact are allowed.
-- Container bounds must account for square rotation.
-- Validate independently after reloading saved solutions and the CSV.
-- Never accept an overlap penalty as proof that a packing is valid.
+A complete, self-contained Jupyter notebook is provided at [`notebooks/squares_in_squares.ipynb`](file:///c:/Users/Hp/Downloads/Squares_in_Squares/squares-in-squares/notebooks/squares_in_squares.ipynb).
 
-## Kaggle and GitHub
+### Running the Notebook Locally
+```bash
+jupyter notebook notebooks/squares_in_squares.ipynb
+```
 
-Use GitHub for source control and Kaggle for computation. Clone the repository into a Kaggle notebook, run small tests first, and save checkpoints to persistent storage before the session ends. Notebook-to-GitHub linking does not automatically synchronize all project files; commit/push code changes separately when needed.
+### Publishing to Kaggle via CLI
+1. Configure your Kaggle credentials:
+   - Run `kaggle auth login` in terminal, or
+   - Download `kaggle.json` from `https://www.kaggle.com/settings/api` and save to `~/.kaggle/kaggle.json`.
+2. Push the notebook kernel:
+   ```bash
+   kaggle kernels push -p notebooks
+   ```
+3. Check kernel run status:
+   ```bash
+   kaggle kernels status ujjwalupreti/squares-in-squares-optimizer
+   ```
 
-## Competition references
+### Submitting via Kaggle UI
+1. Open the pushed notebook on Kaggle.
+2. Click **Save Version** -> **Save & Run All (Commit)**.
+3. Once completed, go to the **Output** section, locate `/kaggle/working/submission.csv`, and click **Submit to Competition**.
 
-- Competition: https://www.kaggle.com/competitions/squares-in-squares
-- Metric notebook: https://www.kaggle.com/code/metric/squares-in-squares
+---
 
-Before final submission, compare the local score implementation and CSV expectations with the current official competition metric and rules.
+## 6. Reference Notebook Analysis & Technique Adoption
+
+We conducted an in-depth reverse-engineering analysis of the reference notebook:  
+`malyshevdanil/squares-in-squares-neighbour-transfer-squeeze` (detailed report in [`docs/reference_notebook_analysis.md`](file:///c:/Users/Hp/Downloads/Squares_in_Squares/squares-in-squares/docs/reference_notebook_analysis.md)).
+
+### Techniques Adopted:
+1. **Contact-LP Squeeze (HiGHS)**:
+   - For fixed rotation angles $\theta_i$, pairwise separation and bounding box constraints are strictly linear in $(x_i, y_i, L)$.
+   - Solved via `scipy.optimize.linprog(method='highs')` in milliseconds, squeezing out minute continuous translation slack.
+2. **Safety Dilation**:
+   - Applying a small non-zero buffer ($\delta \approx 10^{-11}$) before serializing to CSV to prevent floating-point precision loss upon Kaggle server-side string conversion.
+3. **Neighbour Transfer ($n+1 \to n$)**:
+   - Removing redundant boundary squares from puzzle $n+1$ to seed compact candidate layouts for puzzle $n$.
+
+### Techniques Modified or Rejected:
+1. **Fixed Rotation Restriction (Modified)**:
+   - Danil's notebook keeps angles frozen during LP polish. Our system couples Contact-LP with continuous and micro-angle perturbations to allow rotated re-locking.
+2. **Starting Baseline (Rejected)**:
+   - The reference notebook started from an older public score (`22.372005`). Our `SolutionStore` starts from a superior verified incumbent store achieving **`22.299956`** (+0.072 ahead).
+
+---
+
+## 7. Test Suite & Verification
+
+Run the full pytest test suite:
+```bash
+python -m pytest tests/ -v
+```
+- **119 tests pass**:
+  - `test_geometry.py`: Half-extents, corner formulas, axis-aligned bounds, SAT collision detection, spatial hashing.
+  - `test_moves.py`: Single translation, rotation, combined moves, group translation, boundary detection.
+  - `test_objective.py`: Smooth penalty, container objective, monotonicity.
+  - `test_packing.py`: Grid packing, staggered packing, rotated pattern validity.
+  - `test_optimization.py`: Simulated annealing, local search, multi-start restart orchestration.
+  - `test_integration.py`: Atomic checkpoint writing, corrupted checkpoint recovery, resume semantics.
+  - `test_cli.py`: Command-line interface end-to-end execution.
+
+---
+
+## 8. Known Limitations
+
+1. **Jammed Configurations**:
+   - Incumbent solutions for $n \in \{5, 10, 11, 18, 19, 28, 40, 50\}$ are mathematically proved or algebraically rigid local minima; local perturbation cannot compress them without changing the combinatorial contact graph.
+2. **Grid Puzzles**:
+   - 422 puzzles currently use integer grid packing with $L = \lceil\sqrt{n}\rceil$. Substantial compute (stochastic global search with rotated angle nets) is required to identify non-grid configurations that fit into $L < \lceil\sqrt{n}\rceil$.
+3. **Kaggle API Credentials**:
+   - Kernel publication requires local authentication via `kaggle auth login` or valid API token.

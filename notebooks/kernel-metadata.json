@@ -1,0 +1,16 @@
+{
+  "id": "ujjwalupreti/squares-in-squares-optimizer",
+  "title": "Squares in Squares: Geometric Optimizer & Squeeze",
+  "code_file": "squares_in_squares.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_tpu": false,
+  "enable_internet": true,
+  "dataset_sources": [],
+  "competition_sources": [
+    "squares-in-squares"
+  ],
+  "kernel_sources": []
+}
