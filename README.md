@@ -37,8 +37,7 @@ $$\text{Aggregate Score} = \sum_{n=1}^{1000} \text{score}(n)$$
 │   ├── DESIGN.md               Technical design and numerical tolerances
 │   ├── PRD.md                  Product requirements and acceptance criteria
 │   ├── RULES.md                Official competition rules and verification contract
-│   ├── TASKS.md                Task tracking plan with verified evidence
-│   └── reference_notebook_analysis.md Detailed breakdown of malyshevdanil reference notebook
+│   └── TASKS.md                Task tracking plan with verified evidence
 ├── notebooks/                  Kaggle publication-ready notebooks
 │   ├── squares_in_squares.ipynb Complete self-contained competition notebook
 │   └── kernel-metadata.json    Kaggle CLI kernel configuration
@@ -183,10 +182,9 @@ jupyter notebook notebooks/squares_in_squares.ipynb
 
 ---
 
-## 6. Reference Notebook Analysis & Technique Adoption
+## 6. Reference Technique Adoption
 
-We conducted an in-depth reverse-engineering analysis of the reference notebook:  
-`malyshevdanil/squares-in-squares-neighbour-transfer-squeeze` (detailed report in [`docs/reference_notebook_analysis.md`](file:///c:/Users/Hp/Downloads/Squares_in_Squares/squares-in-squares/docs/reference_notebook_analysis.md)).
+We analyzed the algorithmic techniques from reference notebook `malyshevdanil/squares-in-squares-neighbour-transfer-squeeze`:
 
 ### Techniques Adopted:
 1. **Contact-LP Squeeze (HiGHS)**:
@@ -199,7 +197,7 @@ We conducted an in-depth reverse-engineering analysis of the reference notebook:
 
 ### Techniques Modified or Rejected:
 1. **Fixed Rotation Restriction (Modified)**:
-   - Danil's notebook keeps angles frozen during LP polish. Our system couples Contact-LP with continuous and micro-angle perturbations to allow rotated re-locking.
+   - The reference approach keeps angles frozen during LP polish. Our system couples Contact-LP with continuous and micro-angle perturbations to allow rotated re-locking.
 2. **Starting Baseline (Rejected)**:
    - The reference notebook started from an older public score (`22.372005`). Our `SolutionStore` starts from a superior verified incumbent store achieving **`22.299956`** (+0.072 ahead).
 
@@ -228,5 +226,3 @@ python -m pytest tests/ -v
    - Incumbent solutions for $n \in \{5, 10, 11, 18, 19, 28, 40, 50\}$ are mathematically proved or algebraically rigid local minima; local perturbation cannot compress them without changing the combinatorial contact graph.
 2. **Grid Puzzles**:
    - 422 puzzles currently use integer grid packing with $L = \lceil\sqrt{n}\rceil$. Substantial compute (stochastic global search with rotated angle nets) is required to identify non-grid configurations that fit into $L < \lceil\sqrt{n}\rceil$.
-3. **Kaggle API Credentials**:
-   - Kernel publication requires local authentication via `kaggle auth login` or valid API token.
