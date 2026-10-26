@@ -1,0 +1,71 @@
+{
+  "experiment_id": "EXP-20261026-SCORE-IMPROVE-01",
+  "git_commit": "abbac67",
+  "timestamp_start": "2026-10-26T20:28:18Z",
+  "timestamp_end": "2026-10-26T23:25:00Z",
+  "environment": {
+    "os": "Windows",
+    "python": "3.11.4",
+    "scipy_highs": true,
+    "numpy": "1.26.4",
+    "pandas": "2.2.2"
+  },
+  "baseline": {
+    "file": "submissions/submission_best_22_299956.csv",
+    "score": 22.2999556683,
+    "rows": 500500,
+    "puzzles": 1000,
+    "grid_count": 453,
+    "rotated_count": 547,
+    "collisions": 0
+  },
+  "strategies_benchmarked": [
+    {
+      "strategy": "Strategy A: Rotated Packing at Grid Transition Boundaries",
+      "puzzles_targeted": [12, 20],
+      "method": "Multi-seed simulated annealing with translation/rotation moves",
+      "seeds": [42, 123, 777, 999, 2026],
+      "candidates_tested": 10,
+      "accepted_improvements": 0,
+      "status": "No candidate beat the tight integer grid boundary (L=4.0 for n=12, L=5.0 for n=20) within search budget."
+    },
+    {
+      "strategy": "Strategy B: Controlled Neighbour Transfer and Squeeze",
+      "puzzles_targeted": [5, 300],
+      "method": "Removal of boundary squares from n+1 followed by container re-bounding and HiGHS LP squeeze",
+      "candidates_tested": 232,
+      "accepted_improvements": 0,
+      "status": "Monotonic incumbent chain; single-square removals without angle relaxation leave perimeter constraints active."
+    },
+    {
+      "strategy": "Strategy C: Contact-Based Optimization with HiGHS",
+      "puzzles_targeted": [50, 100],
+      "method": "Linear programming compaction of square centers with fixed rotation angles",
+      "candidates_tested": 51,
+      "accepted_improvements": 0,
+      "status": "Rotated packings are already rigidly jammed along separating axes; fixed-angle LP degrees of freedom are zero."
+    },
+    {
+      "strategy": "Strategy E: Selective Coordinate Quenching / Local Refinement",
+      "puzzles_targeted": [17, 18, 19, 26, 27, 28, 29, 37, 38, 39, 40, 41],
+      "method": "Greedy hill-climbing with inward boundary nudges and angular perturbations",
+      "seeds": [42, 101, 777],
+      "candidates_tested": 36,
+      "accepted_improvements": 0,
+      "status": "Incumbent rotated layouts correspond to exact algebraic local minima; greedy steps strictly rejected to prevent infeasibility."
+    }
+  ],
+  "summary": {
+    "baseline_score": 22.2999556683,
+    "candidate_score": 22.2999556683,
+    "absolute_improvement": 0.0,
+    "relative_improvement": 0.0,
+    "number_of_puzzles_improved": 0,
+    "number_of_puzzles_unchanged": 1000,
+    "number_of_puzzles_rejected": 0,
+    "number_of_invalid_candidates": 0,
+    "promoted_submission": "submissions/submission_improved.csv",
+    "certified_valid": true,
+    "collisions": 0
+  }
+}
