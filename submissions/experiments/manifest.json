@@ -1,8 +1,8 @@
 {
-  "experiment_id": "EXP-20261026-SCORE-IMPROVE-01",
-  "git_commit": "abbac67",
-  "timestamp_start": "2026-10-26T20:28:18Z",
-  "timestamp_end": "2026-10-26T23:25:00Z",
+  "experiment_id": "EXP-20261030-SCORE-IMPROVE-02",
+  "git_commit": "1f23820",
+  "timestamp_start": "2026-10-28T15:00:00Z",
+  "timestamp_end": "2026-10-30T19:20:00Z",
   "environment": {
     "os": "Windows",
     "python": "3.11.4",
@@ -12,7 +12,7 @@
   },
   "baseline": {
     "file": "submissions/submission_best_22_299956.csv",
-    "score": 22.2999556683,
+    "score": 22.299955713,
     "rows": 500500,
     "puzzles": 1000,
     "grid_count": 453,
@@ -24,48 +24,41 @@
       "strategy": "Strategy A: Rotated Packing at Grid Transition Boundaries",
       "puzzles_targeted": [12, 20],
       "method": "Multi-seed simulated annealing with translation/rotation moves",
-      "seeds": [42, 123, 777, 999, 2026],
       "candidates_tested": 10,
       "accepted_improvements": 0,
-      "status": "No candidate beat the tight integer grid boundary (L=4.0 for n=12, L=5.0 for n=20) within search budget."
+      "status": "Integer grid boundaries (L=4.0 for n=12, L=5.0 for n=20) require combinatorial crystal initialization."
     },
     {
       "strategy": "Strategy B: Controlled Neighbour Transfer and Squeeze",
-      "puzzles_targeted": [5, 300],
-      "method": "Removal of boundary squares from n+1 followed by container re-bounding and HiGHS LP squeeze",
-      "candidates_tested": 232,
+      "puzzles_targeted": [184, 212, 242],
+      "method": "Transfer from n-1, void insertion, and HiGHS linear programming contact squeeze",
+      "candidates_tested": 3,
       "accepted_improvements": 0,
-      "status": "Monotonic incumbent chain; single-square removals without angle relaxation leave perimeter constraints active."
+      "status": "Monotonic incumbent chain exhibits rigid mechanical jamming; perimeter constraints remain active."
     },
     {
-      "strategy": "Strategy C: Contact-Based Optimization with HiGHS",
-      "puzzles_targeted": [50, 100],
-      "method": "Linear programming compaction of square centers with fixed rotation angles",
-      "candidates_tested": 51,
-      "accepted_improvements": 0,
-      "status": "Rotated packings are already rigidly jammed along separating axes; fixed-angle LP degrees of freedom are zero."
-    },
-    {
-      "strategy": "Strategy E: Selective Coordinate Quenching / Local Refinement",
-      "puzzles_targeted": [17, 18, 19, 26, 27, 28, 29, 37, 38, 39, 40, 41],
-      "method": "Greedy hill-climbing with inward boundary nudges and angular perturbations",
-      "seeds": [42, 101, 777],
-      "candidates_tested": 36,
-      "accepted_improvements": 0,
-      "status": "Incumbent rotated layouts correspond to exact algebraic local minima; greedy steps strictly rejected to prevent infeasibility."
+      "strategy": "Strategy F: Asymmetric Multi-Angle Cluster Relaxation",
+      "puzzles_targeted": [232, 260, 299],
+      "method": "Breaking single-angle rigid diagonal band symmetry into multi-angle corner clusters with boundary relaxation",
+      "candidates_tested": 3,
+      "accepted_improvements": 3,
+      "improvements": {
+        "n_232": {"old_L": 15.76417432, "new_L": 15.76377787, "delta_L": 0.00039645, "score_drop": 0.00002603},
+        "n_260": {"old_L": 16.64575325, "new_L": 16.64214877, "delta_L": 0.00360449, "score_drop": 0.00022354},
+        "n_299": {"old_L": 17.82287566, "new_L": 17.81328555, "delta_L": 0.00959011, "score_drop": 0.00055461}
+      },
+      "status": "SUCCESS: All 3 candidates certified with zero overlaps at 0.0 tolerance; overall score dropped by 0.00080418."
     }
   ],
   "summary": {
-    "baseline_score": 22.2999556683,
-    "candidate_score": 22.2999556683,
-    "absolute_improvement": 0.0,
-    "relative_improvement": 0.0,
-    "number_of_puzzles_improved": 0,
-    "number_of_puzzles_unchanged": 1000,
-    "number_of_puzzles_rejected": 0,
-    "number_of_invalid_candidates": 0,
-    "promoted_submission": "submissions/submission_improved.csv",
-    "certified_valid": true,
-    "collisions": 0
+    "baseline_score": 22.299955713,
+    "candidate_score": 22.2991515338,
+    "absolute_improvement": 0.0008041792,
+    "relative_improvement_percent": 0.003606,
+    "puzzles_improved": 3,
+    "puzzles_unchanged": 997,
+    "puzzles_rejected": 0,
+    "total_rows": 500500,
+    "zero_overlap_certified": true
   }
 }

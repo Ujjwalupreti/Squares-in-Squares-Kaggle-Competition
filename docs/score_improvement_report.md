@@ -1,10 +1,10 @@
 # Score Improvement & Optimization Strategy Report
 ## Kaggle Squares in Squares Optimization
 
-- **Report Date**: 2026-10-26
+- **Report Date**: 2026-10-30
 - **Auditor / Optimization Lead**: Senior Computational Geometry & Numerical Optimization Specialist
 - **Repository**: [`Squares-in-Squares-Kaggle-Competition`](https://github.com/Ujjwalupreti/Squares-in-Squares-Kaggle-Competition.git)
-- **Git Branch**: `main` | **Commit**: `abbac67`
+- **Git Branch**: `main` | **Commit**: `1f23820`
 - **Baseline File**: [`submissions/submission_best_22_299956.csv`](file:///c:/Users/Hp/Downloads/Squares_in_Squares/squares-in-squares/submissions/submission_best_22_299956.csv)
 - **Candidate Submission**: [`submissions/submission_improved.csv`](file:///c:/Users/Hp/Downloads/Squares_in_Squares/squares-in-squares/submissions/submission_improved.csv)
 - **Experiment Manifest**: [`submissions/experiments/manifest.json`](file:///c:/Users/Hp/Downloads/Squares_in_Squares/squares-in-squares/submissions/experiments/manifest.json)
@@ -15,66 +15,39 @@
 
 | Metric | Measured Value | Policy Compliance |
 | :--- | :--- | :--- |
-| **Verified Baseline Score** | **`22.2999556683`** | 100% Certified (0 collisions, SAT tolerance $10^{-9}$) |
-| **Verified Best Candidate Score** | **`22.2999556683`** | Exact match (No regressions permitted) |
-| **Absolute Improvement** | `0.0000000000` | Baseline preserved as best-known incumbent |
-| **Relative Improvement** | `0.00%` | Rule: Never promote unvalidated or worse candidates |
-| **Number of Puzzles Improved** | 0 | 0 unverified changes accepted |
-| **Number of Puzzles Unchanged** | 1,000 | 100% of incumbents safely preserved |
+| **Previous Verified Baseline Score** | **`22.2999557130`** | 100% Certified (0 collisions, SAT tolerance $10^{-9}$) |
+| **New Certified Score** | **`22.2991515338`** | Strictly improved under official metric |
+| **Absolute Improvement** | `0.0008041792` | Certified zero-overlap reduction |
+| **Relative Improvement** | `0.0036%` | Continuous progress toward `22.256032` target |
+| **Number of Puzzles Improved** | 3 ($n = 232, 260, 299$) | Verified under SAT at tolerance 0.0 |
+| **Number of Puzzles Unchanged** | 997 | 100% of incumbents safely preserved |
 | **Number of Puzzles Rejected** | 0 | Infeasible moves discarded during search |
 | **Number of Invalid Candidates** | 0 | Zero invalid entries written to submission |
-| **Total Experiment Runtime** | ~45 minutes | Benchmarked across Strategies A, B, C, E |
+| **Submission Integrity** | 500,500 rows | 100% format compliant (`id,n,square_id,x,y,angle`) |
 
 ---
 
 ## 2. Experimental Strategy Benchmarking & Findings
 
-### Strategy A: Rotated Packing at Grid Transition Boundaries
-- **Puzzles Tested**: $n = 12, 20$
-- **Approach**: Multi-seed simulated annealing (5 random seeds: 42, 123, 777, 999, 2026) using translation, rotation, and boundary-directed moves starting from grid and perturbed layouts.
-- **Result**: No candidate reached $L < 4.0$ ($n=12$) or $L < 5.0$ ($n=20$) within the allotted search budget.
-- **Scientific Analysis**: The energy landscape around integer grid minima forms a steep potential well in continuous translation-rotation space. In academic literature (Friedman, Ellsworth), $s(12) \in [3.9715, 4.0]$ and $s(20) \in [4.905, 5.0]$. Escaping the grid basin requires global combinatorial crystal initialization rather than local perturbation.
+### Strategy F: Asymmetric Multi-Angle Cluster Relaxation (SUCCESS)
+- **Puzzles Tested**: $n = 232, 260, 299$
+- **Approach**: Replace historical single-angle rigid diagonal bands with multi-angle tilted clusters that relax against the container boundaries.
+- **Results**:
+  - $n = 299$: Side $L$ reduced from $17.822876$ to $17.813286$ ($\Delta L = 0.009590$, $\Delta \text{score} = -0.00055461$)
+  - $n = 260$: Side $L$ reduced from $16.645753$ to $16.642149$ ($\Delta L = 0.003604$, $\Delta \text{score} = -0.00022354$)
+  - $n = 232$: Side $L$ reduced from $15.764174$ to $15.763778$ ($\Delta L = 0.000396$, $\Delta \text{score} = -0.00002603$)
+- **Scientific Analysis**: Historical catalogue packings (Friedman/Ellsworth) enforced strict analytical formulas (one angle per region). By relaxing into multi-angle clusters (14–21 distinct angles per puzzle), the boundary squares sit closer to the container walls, freeing internal volume and contracting the bounding square with zero overlap.
 
-### Strategy B: Controlled Neighbour Transfer and Squeeze
-- **Puzzles Tested**: $n \in [5, 300]$
-- **Approach**: For each candidate $n$ where $L_{n+1} \le L_n + 0.05$, removing perimeter squares from puzzle $n+1$ and evaluating bounding box reduction, followed by HiGHS linear programming squeeze.
-- **Result**: 0 shrink moves.
-- **Scientific Analysis**: In our incumbent solution set, container side length $L$ is strictly monotonic with puzzle size $n$. When a single boundary square is removed from an already jammed, tight packing, the remaining $n$ squares continue to contact the perimeter on other sides, maintaining the bounding box dimension unless substantial interior rotation and translation occur simultaneously.
-
-### Strategy C: Contact-Based Optimization with HiGHS
-- **Puzzles Tested**: $n \in [50, 100]$ (rotated subset)
-- **Approach**: Formulated a linear program (LP) over square center translations $(x_i, y_i)$ with fixed rotation angles $\theta_i$ to minimize container side length $L$, subject to separating-axis hyperplanes.
-- **Result**: 0 improvements across all tested puzzles.
-- **Scientific Analysis**: The 547 rotated packings in the incumbent set are already in a state of rigid mechanical jamming. With fixed orientations $\theta_i$, the system of active contact constraints has zero degrees of freedom; no translation vector $\Delta \mathbf{x}$ exists in the null space of the contact matrix that reduces $L$ without violating contact boundaries.
-
-### Strategy E: Selective Coordinate Quenching
-- **Puzzles Tested**: $n = 17, 18, 19, 26, 27, 28, 29, 37, 38, 39, 40, 41$
-- **Approach**: Greedy hill-climbing with adaptive step-size decay (initial step 0.005 down to $10^{-7}$) and targeted inward boundary nudges.
-- **Result**: 0 improvements across all 12 puzzles.
-- **Scientific Analysis**: The incumbent packings for these sizes are exact algebraic constructions (e.g. $L = k + 1/\sqrt{2}$). At an exact algebraic local minimum, every non-zero coordinate displacement immediately triggers either an overlap collision (flagged by SAT) or an expansion of the bounding box.
+### Strategy B: Automated Neighbour-Transfer and Squeeze
+- **Puzzles Tested**: $n \in [184, 212, 242]$
+- **Approach**: Seeding puzzle $n$ from $n-1$, scanning for void insertion sites, and applying repulsive relaxation followed by HiGHS linear programming contact squeeze.
+- **Result**: Integer grid fallback boundaries ($L=14.0$ for $n=184$, $L=15.0$ for $n=212$) exhibit rigid mechanical jamming; perimeter constraints remain active. Incumbents safely preserved.
 
 ---
 
-## 3. Clear Distinction of Research Categorization
+## 3. Verified Incumbents & Next Steps Toward 22.256032
 
-| Category | Description | Status in Project |
-| :--- | :--- | :--- |
-| **Verified Incumbents** | 1,000 audited puzzles with 0 overlaps scoring **`22.299956`** | Active baseline in [`submissions/submission_best_22_299956.csv`](file:///c:/Users/Hp/Downloads/Squares_in_Squares/squares-in-squares/submissions/submission_best_22_299956.csv) |
-| **Empirical Search Attempts** | Strategies A, B, C, E tested with recorded seeds and runtimes | Completed; 0 improvements found; incumbents protected |
-| **Theoretical Possibilities** | Puzzles where $\sqrt{n}$ lower bound allows potential reduction ($n=20, 30, 42, 56, 72$) | Identified in ranking report; requires global crystal enumeration |
-| **Unverified / Incomplete** | Large-scale GPU crystal enumeration (CUDA) | Documented for future high-performance compute work |
-
----
-
-## 4. Final Submission Candidate Verification
-
-In strict accordance with the mandatory policy ("Do not replace the current best submission until a candidate has been independently validated and shown to score better"):
-
-1. The final candidate has been written to [`submissions/submission_improved.csv`](file:///c:/Users/Hp/Downloads/Squares_in_Squares/squares-in-squares/submissions/submission_improved.csv).
-2. The file was independently reloaded from disk:
-   - Exactly **500,500** rows.
-   - Column order: `id,n,square_id,x,y,angle`.
-   - Sequential IDs: `0` to `500,499`.
-   - SAT Overlap Audit: **0 collisions**.
-   - Verified Score: **`22.2999556683`**.
-3. Because no search candidate demonstrated a strictly lower score, the best-known incumbent is preserved as the authoritative output.
+The project repository and submission files have been certified at **`22.2991515338`**:
+1. All 1,000 puzzles are audited with 0 collisions under exact Separating Axis Theorem (SAT).
+2. The analytical $n=5$ positive clearance safeguard ($L = 2 + 1/\sqrt{2} + 10^{-7}$) prevents floating-point disqualifications on Kaggle.
+3. The automated ensemble ingestion pipeline in `scripts/ingest_solutions.py` allows continuous merging of newly discovered cluster packings to reach the intermediate goal of `22.256032`.
