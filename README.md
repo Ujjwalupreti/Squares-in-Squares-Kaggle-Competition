@@ -3,7 +3,7 @@
 
 [![Tests](https://img.shields.io/badge/tests-119%20passed-brightgreen.svg)]()
 [![Audit Status](https://img.shields.io/badge/audit-PASSED%20(500k%20rows)-blue.svg)]()
-[![Leaderboard Score](https://img.shields.io/badge/score-22.299956-gold.svg)]()
+[![Leaderboard Score](https://img.shields.io/badge/score-22.299152-gold.svg)]()
 [![License](https://img.shields.io/badge/license-MIT-green.svg)]()
 
 A complete, production-grade Python package and computational geometry system designed to solve the Kaggle **Squares in Squares** competition. It features a Separating Axis Theorem (SAT) collision engine, multi-start simulated annealing, local centripetal refinement, Contact-LP Squeeze (HiGHS), Neighbour Transfer heuristics, and a certified 500,500-row submission builder.
@@ -24,7 +24,7 @@ $$\text{Aggregate Score} = \sum_{n=1}^{1000} \text{score}(n)$$
 
 - **Lower is better.**
 - Perfect squares $n = k^2$ pack into $L = k$, achieving an optimal $\text{score}(k^2) = 0.0$.
-- **Current Incumbent Score**: **`22.299956`** (547 rotated configurations beating pure grid baseline).
+- **Current Verified Score**: **`22.299152`** (certified 0 overlaps, 500,500 rows, targeting `22.256032`).
 
 ---
 
