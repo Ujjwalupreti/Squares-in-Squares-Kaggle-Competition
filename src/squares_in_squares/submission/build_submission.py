@@ -63,4 +63,14 @@ def build_submission(
     df = pd.DataFrame(rows, columns=["id", "n", "square_id", "x", "y", "angle"])
     df.to_csv(output_path, index=False)
 
+    # Compute overall score for convenience
+    total_score = 0.0
+    for n in range(n_min, n_max + 1):
+        rec = store.load(n)
+        if rec is not None:
+            total_score += rec.score
+
+    if len(missing) == 0:
+        print(f"Successfully generated {output_path} ({len(rows):,} rows, 1,000 puzzles, total score: {total_score:.10f})")
+
     return len(missing) == 0, len(rows), missing
