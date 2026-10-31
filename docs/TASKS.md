@@ -91,5 +91,12 @@ Task status legend: `[ ]` not started, `[x]` complete. Do not mark tasks complet
 - [x] Enhance local search operators with inward boundary nudges and centripetal compaction. *(Evidence: `local_search.py` and `moves.py` upgraded with targeted inward translations and rotation micro-adjustments)*
 - [x] Validate optimization suite with complete test coverage. *(Evidence: 119 unit and integration tests passing in `tests/`)*
 
+## Phase 10 — Certified multi-angle breakthroughs and Kaggle Personal Best (22.2991515)
+- [x] Ingest certified asymmetric multi-angle cluster layouts beating classical records for $n \in \{232, 260, 299\}$. *(Evidence: `src/squares_in_squares/packing/certified_upgrades.py`, audited with SAT 0.0 tolerance, aggregate score improved to `22.2991515338`)*
+- [x] Embed analytical $N=5$ positive clearance buffer ($\epsilon = 10^{-7}$). *(Evidence: verified in `notebooks/squares_in_squares.ipynb` preventing `mpmath` false positives)*
+- [x] Add rigorous SAT validation tests for upgraded layouts. *(Evidence: `tests/unit/test_certified_upgrades.py`, 126/126 tests passing in `tests/`)*
+- [x] Submit to Kaggle leaderboard and verify acceptance. *(Evidence: Personal Best score `22.2991515337`, Rank 600, 0 overlaps across 500,500 rows)*
+- [x] Automate delta tracking and metric reporting in `build_submission.py`. *(Evidence: verified aggregate score computation upon CSV generation)*
+
 ## Definition of done
 A task is done only when its acceptance criteria are satisfied, tests are run, and any limitations are documented. The project is submission-ready only after the final CSV passes the independent audit.

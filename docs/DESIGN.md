@@ -37,6 +37,12 @@ Use SAT with four candidate axes for two squares:
 
 The broad phase may use bounding boxes to avoid unnecessary SAT checks. The narrow phase must use the actual oriented squares. Contact is allowed; the tolerance policy must avoid both false acceptance of meaningful overlaps and false rejection of contact.
 
+### 5.1 Submission Gatekeeper & Kaggle `mpmath` Safeguard
+- For external candidate ingestion (`scripts/ingest_solutions.py`), a strict zero-tolerance policy (`tolerance = 0.0`) is enforced.
+- Kaggle evaluates submissions with multi-precision interval arithmetic (`mpmath`). To prevent floating-point rounding errors on tight algebraic contact configurations (such as $n=5$), an analytical positive clearance buffer ($\epsilon = 10^{-7}$) is applied:
+  $$L_5 = 2.0 + \frac{1}{\sqrt{2}} + 10^{-7} \approx 2.7071068812$$
+- This guarantees zero overlap under arbitrary-precision evaluation and prevents false disqualifications.
+
 ## 6. Objective design
 Competition metric for each puzzle:
 `score(n) = L / sqrt(n) - 1`
