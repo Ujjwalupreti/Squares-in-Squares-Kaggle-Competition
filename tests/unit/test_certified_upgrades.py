@@ -8,13 +8,28 @@ import math
 import numpy as np
 import pytest
 
-from squares_in_squares.packing.certified_upgrades import CERTIFIED_UPGRADES, apply_certified_upgrades
+from squares_in_squares.packing.certified_upgrades import (
+    CERTIFIED_UPGRADES,
+    apply_certified_upgrades,
+    get_certified_packing,
+    list_certified_puzzles,
+)
 from squares_in_squares.validation.packing_validator import validate_packing_geometry
 from squares_in_squares.geometry.bounds import container_side_length
 
 
 class TestCertifiedUpgrades:
     """Test suite for certified packing upgrades."""
+
+    def test_list_certified_puzzles(self):
+        puzzles = list_certified_puzzles()
+        assert puzzles == [232, 260, 299]
+
+    def test_get_certified_packing_valid_and_invalid(self):
+        sqs = get_certified_packing(299)
+        assert sqs is not None
+        assert len(sqs) == 299
+        assert get_certified_packing(9999) is None
 
     @pytest.mark.parametrize("n", [232, 260, 299])
     def test_certified_upgrade_exists(self, n: int):
@@ -38,3 +53,4 @@ class TestCertifiedUpgrades:
         assert 232 in dummy_sols
         assert 260 in dummy_sols
         assert 299 in dummy_sols
+
