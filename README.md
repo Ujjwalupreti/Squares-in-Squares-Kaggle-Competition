@@ -3,20 +3,19 @@
 ## Kaggle Competition: Squares in Squares
 
 [![Kaggle Notebook](https://img.shields.io/badge/Kaggle-Notebook-20BEFF.svg)](https://www.kaggle.com/code/ujjwalupreti/squares-in-squares-geometric-optimization)
-[![Leaderboard Score](<https://img.shields.io/badge/Kaggle%20Score-22.2991515-gold.svg>)](https://www.kaggle.com/code/ujjwalupreti/squares-in-squares-geometric-optimization)
+[![Certified Score](<https://img.shields.io/badge/Certified%20Score-22.2937098-gold.svg>)](https://www.kaggle.com/code/ujjwalupreti/squares-in-squares-geometric-optimization)
 [![Leaderboard Rank](<https://img.shields.io/badge/Leaderboard%20Rank-600-blueviolet.svg>)](https://www.kaggle.com/code/ujjwalupreti/squares-in-squares-geometric-optimization)
-[![Personal Best](<https://img.shields.io/badge/Personal%20Best-22.2991515-success.svg>)]()
+[![Personal Best](<https://img.shields.io/badge/Personal%20Best-22.2937098-success.svg>)]()
 [![SAT Validation](<https://img.shields.io/badge/SAT%20Overlaps-0.0%20(Certified)-brightgreen.svg>)]()
-[![Tests](<https://img.shields.io/badge/tests-126%20passed-brightgreen.svg>)]()
 [![License](https://img.shields.io/badge/license-MIT-green.svg)]()
 
-A complete, production-grade Python computational geometry package and optimization pipeline designed for the Kaggle **Squares in Squares** competition. It features an exact Separating Axis Theorem (SAT) collision engine, multi-start simulated annealing, Contact-LP Squeeze (HiGHS), Neighbour Transfer heuristics, certified multi-angle cluster packings beating published records, and an audited 500,500-row submission builder.
+A complete, production-grade Python computational geometry package and optimization pipeline designed for the Kaggle **Squares in Squares** competition. It features an exact Separating Axis Theorem (SAT) collision engine, multi-start simulated annealing, Contact-LP Squeeze (HiGHS), Neighbour Transfer heuristics, certified multi-angle cluster packings beating published records, automated greedy merging with radial contact dilation, and an audited 500,500-row submission builder.
 
 - **Kaggle Notebook**: [Squares in Squares: Geometric Optimization](https://www.kaggle.com/code/ujjwalupreti/squares-in-squares-geometric-optimization)
-- **Current Official Score**: **`22.2991515337`** (Rank 600, 10 submissions, zero overlap penalty)
-- **Score Improvement**: `22.2999557130` $\to$ **`22.2991515337`** ($\Delta S = -0.00080418$)
-- **Next Target Milestone**: **`22.2560322816`** ($\Delta S = 0.0431192521$ remaining)
-- **Long-Term Continuum Limit**: **`22.1400000000`**
+- **Certified Personal Best**: **`22.29370977`** (Audited with zero overlap penalty)
+- **Net Improvement**: `22.29915153` $\to$ **`22.29370977`** ($\Delta S = -0.00544177$)
+- **Next Target Milestone**: **`22.25000000`** ($\Delta S = 0.04370977$ remaining)
+- **Long-Term Continuum Limit**: **`22.14000000`**
 
 ---
 
@@ -38,17 +37,18 @@ $$
 
 - **Lower is better.**
 - Perfect squares $n = k^2$ pack into $L = k$, achieving an optimal $\text{score}(k^2) = 0.0$.
-- **Current Verified Leaderboard Score**: **`22.2991515337`** (Rank 600, certified 0 overlaps across all 1,000 puzzles).
+- **Current Verified Certified Score**: **`22.29370977`** (Certified 0 overlaps across all 1,000 puzzles).
 
 ### Optimization Progress Tracking
 
 | Milestone / Pipeline Stage                                                   |          Score          | $\Delta S$ vs. Baseline |                  Status                  |
 | :--------------------------------------------------------------------------- | :---------------------: | :-----------------------: | :--------------------------------------: |
-| **Deterministic Grid Baseline** ($L = \lceil\sqrt{n}\rceil$)         |      `28.937670`      |         Reference         |            Verified & Audited            |
-| **Initial Incumbent Store**                                            |      `22.299956`      |       $-6.637714$       |            Accepted by Kaggle            |
-| **Certified Multi-Angle Upgrades** ($n=232, 260, 299$)               | **`22.299152`** |  **$-6.638518$**  | **Current Leaderboard (Rank 600)** |
-| **Target Phase 1: Transition Grid Compression** ($n \in [184, 255]$) |      `22.256032`      |       $-6.681638$       | Active Target ($\Delta S = 0.043119$) |
-| **Target Phase 2: Theoretical Dense Continuum Bound**                  |      `22.140000`      |       $-6.797670$       |             Long-term Target             |
+| **Deterministic Grid Baseline** ($L = \lceil\sqrt{n}\rceil$)                 |      `28.937670`        |         Reference         |            Verified & Audited            |
+| **Initial Incumbent Store**                                                  |      `22.299956`        |       $-6.637714$         |            Accepted by Kaggle            |
+| **Certified Multi-Angle Upgrades** ($n=232, 260, 299$)                       |      `22.299152`        |       $-6.638518$         |            Leaderboard Rank 600          |
+| **Greedy Merge & Dilation Optimizer (20 Upgraded Puzzles)**                  | **`22.293710`**         |     **$-6.643960$**       | **Current Certified Best (0.0 SAT)**     |
+| **Target Phase 1: High-Density Merge & Grid Compression**                    |      `22.250000`        |       $-6.687670$         | Active Target ($\Delta S = 0.043710$)    |
+| **Target Phase 2: Theoretical Dense Continuum Bound**                        |      `22.140000`        |       $-6.797670$         |             Long-term Target             |
 
 ---
 
@@ -56,7 +56,7 @@ $$
 
 ### 2.1 Certified Upgrades Beating Classical Records ($n = 232, 260, 299$)
 
-Historical catalogue records (Friedman/Ellsworth) enforce rigid single-angle diagonal bands (e.g., all tilted squares locked at $24.3^\circ$). We developed **asymmetric multi-angle cluster relaxation**, allowing tilted squares to split into corner clusters with multi-angle relaxation (14–21 distinct angles), pulling the boundary squares tighter to the walls and contracting the bounding square:
+Historical catalogue records enforce rigid single-angle diagonal bands (e.g., all tilted squares locked at $24.3^\circ$). We developed **asymmetric multi-angle cluster relaxation**, allowing tilted squares to split into corner clusters with multi-angle relaxation (14–21 distinct angles), pulling the boundary squares tighter to the walls and contracting the bounding square:
 
 |     Puzzle $n$     | Classical Catalogue Record |    Our Certified Packing    | Improvement ($\Delta L$) | Score Reduction ($\Delta \text{score}$) |
 | :-------------------: | :------------------------: | :-------------------------: | :------------------------: | :---------------------------------------: |
