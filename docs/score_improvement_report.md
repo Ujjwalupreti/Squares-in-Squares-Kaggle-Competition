@@ -36,7 +36,7 @@
   - $n = 299$: Side $L$ reduced from $17.822876$ to $17.813286$ ($\Delta L = 0.009590$, $\Delta \text{score} = -0.00055461$)
   - $n = 260$: Side $L$ reduced from $16.645753$ to $16.642149$ ($\Delta L = 0.003604$, $\Delta \text{score} = -0.00022354$)
   - $n = 232$: Side $L$ reduced from $15.764174$ to $15.763778$ ($\Delta L = 0.000396$, $\Delta \text{score} = -0.00002603$)
-- **Scientific Analysis**: Historical catalogue packings (Friedman/Ellsworth) enforced strict analytical formulas (one angle per region). By relaxing into multi-angle clusters (14–21 distinct angles per puzzle), the boundary squares sit closer to the container walls, freeing internal volume and contracting the bounding square with zero overlap.
+- **Scientific Analysis**: Historical catalogue packings enforced strict analytical formulas (one angle per region). By relaxing into multi-angle clusters (14–21 distinct angles per puzzle), the boundary squares sit closer to the container walls, freeing internal volume and contracting the bounding square with zero overlap.
 
 ### Strategy B: Automated Neighbour-Transfer and Squeeze
 - **Puzzles Tested**: $n \in [184, 212, 242]$

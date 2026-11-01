@@ -182,9 +182,9 @@ jupyter notebook notebooks/squares_in_squares.ipynb
 
 ---
 
-## 6. Reference Technique Adoption
+## 6. Advanced Optimization Techniques
 
-We analyzed the algorithmic techniques from reference notebook `malyshevdanil/squares-in-squares-neighbour-transfer-squeeze`:
+We developed and integrated key algorithmic techniques into our optimization pipeline:
 
 ### Techniques Adopted:
 1. **Contact-LP Squeeze (HiGHS)**:
