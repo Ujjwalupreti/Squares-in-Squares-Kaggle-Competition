@@ -98,5 +98,13 @@ Task status legend: `[ ]` not started, `[x]` complete. Do not mark tasks complet
 - [x] Submit to Kaggle leaderboard and verify acceptance. *(Evidence: Personal Best score `22.2991515337`, Rank 600, 0 overlaps across 500,500 rows)*
 - [x] Automate delta tracking and metric reporting in `build_submission.py`. *(Evidence: verified aggregate score computation upon CSV generation)*
 
+## Phase 11 — Automated greedy merge pipeline, safe contact dilation, and breakthrough to 22.293710
+- [x] Implement automated greedy packing merger and contact dilation optimizer. *(Evidence: `scripts/optimize_and_merge.py` with radial centroid dilation $\delta = 10^{-11}$)*
+- [x] Ingest and verify 20 breakthrough packings with zero tolerance SAT. *(Evidence: verified across $n \in \{130, 182, 232, 260, 299, 307, 333, 334, 335, 338, 342, 343, 344, 365, 370, 372, 373, 376, 377, 379\}$ with 0 overlaps)*
+- [x] Generate upgraded submission achieving certified score `22.29370977`. *(Evidence: net reduction $-0.00544177$ documented in `docs/breakthrough_audit_report_22_2937.md`)*
+- [x] Update certified upgrade helper queries and unit tests. *(Evidence: `src/squares_in_squares/packing/certified_upgrades.py` and `tests/unit/test_certified_upgrades.py` with 9/9 passing tests)*
+- [x] Establish roadmap toward target score $\le 22.250000$. *(Evidence: documented in `docs/breakthrough_audit_report_22_2937.md` and `README.md`)*
+
 ## Definition of done
 A task is done only when its acceptance criteria are satisfied, tests are run, and any limitations are documented. The project is submission-ready only after the final CSV passes the independent audit.
+
