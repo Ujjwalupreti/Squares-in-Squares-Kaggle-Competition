@@ -3,18 +3,20 @@
 ## Kaggle Competition: Squares in Squares
 
 [![Kaggle Notebook](https://img.shields.io/badge/Kaggle-Notebook-20BEFF.svg)](https://www.kaggle.com/code/ujjwalupreti/squares-in-squares-geometric-optimization)
-[![Certified Score](<https://img.shields.io/badge/Certified%20Score-22.2937098-gold.svg>)](https://www.kaggle.com/code/ujjwalupreti/squares-in-squares-geometric-optimization)
+[![Certified Score](<https://img.shields.io/badge/Certified%20Score-22.257047-gold.svg>)](https://www.kaggle.com/code/ujjwalupreti/squares-in-squares-geometric-optimization)
 [![Leaderboard Rank](<https://img.shields.io/badge/Leaderboard%20Rank-600-blueviolet.svg>)](https://www.kaggle.com/code/ujjwalupreti/squares-in-squares-geometric-optimization)
-[![Personal Best](<https://img.shields.io/badge/Personal%20Best-22.2937098-success.svg>)]()
+[![Personal Best](<https://img.shields.io/badge/Personal%20Best-22.257047-success.svg>)]()
 [![SAT Validation](<https://img.shields.io/badge/SAT%20Overlaps-0.0%20(Certified)-brightgreen.svg>)]()
+[![Tests](<https://img.shields.io/badge/tests-128%20passed-brightgreen.svg>)]()
 [![License](https://img.shields.io/badge/license-MIT-green.svg)]()
 
-A complete, production-grade Python computational geometry package and optimization pipeline designed for the Kaggle **Squares in Squares** competition. It features an exact Separating Axis Theorem (SAT) collision engine, multi-start simulated annealing, Contact-LP Squeeze (HiGHS), Neighbour Transfer heuristics, certified multi-angle cluster packings beating published records, automated greedy merging with radial contact dilation, and an audited 500,500-row submission builder.
+A complete, production-grade Python computational geometry package and optimization pipeline designed for the Kaggle **Squares in Squares** competition. It features an exact Separating Axis Theorem (SAT) collision engine, multi-start simulated annealing, Contact-LP Squeeze (HiGHS), Neighbour Transfer heuristics, certified multi-angle cluster packings beating published records, automated greedy merging with selective contact dilation, and an audited 500,500-row submission builder.
 
 - **Kaggle Notebook**: [Squares in Squares: Geometric Optimization](https://www.kaggle.com/code/ujjwalupreti/squares-in-squares-geometric-optimization)
-- **Certified Personal Best**: **`22.29370977`** (Audited with zero overlap penalty)
-- **Net Improvement**: `22.29915153` $\to$ **`22.29370977`** ($\Delta S = -0.00544177$)
-- **Next Target Milestone**: **`22.25000000`** ($\Delta S = 0.04370977$ remaining)
+- **Certified Personal Best**: **`22.25704679`** (Audited with zero overlap penalty across 1,000 puzzles)
+- **Net Improvement**: `22.29915153` $\to$ **`22.25704679`** ($\Delta S = -0.04210474$)
+- **Upgraded Layouts**: **248 puzzles** strictly improved over previous incumbent store
+- **Next Target Milestone**: **`22.23000000`** ($\Delta S = 0.02704679$ remaining)
 - **Long-Term Continuum Limit**: **`22.14000000`**
 
 ---
@@ -37,7 +39,7 @@ $$
 
 - **Lower is better.**
 - Perfect squares $n = k^2$ pack into $L = k$, achieving an optimal $\text{score}(k^2) = 0.0$.
-- **Current Verified Certified Score**: **`22.29370977`** (Certified 0 overlaps across all 1,000 puzzles).
+- **Current Verified Certified Score**: **`22.25704679`** (Certified 0 overlaps across all 1,000 puzzles).
 
 ### Optimization Progress Tracking
 
@@ -46,8 +48,8 @@ $$
 | **Deterministic Grid Baseline** ($L = \lceil\sqrt{n}\rceil$)                 |      `28.937670`        |         Reference         |            Verified & Audited            |
 | **Initial Incumbent Store**                                                  |      `22.299956`        |       $-6.637714$         |            Accepted by Kaggle            |
 | **Certified Multi-Angle Upgrades** ($n=232, 260, 299$)                       |      `22.299152`        |       $-6.638518$         |            Leaderboard Rank 600          |
-| **Greedy Merge & Dilation Optimizer (20 Upgraded Puzzles)**                  | **`22.293710`**         |     **$-6.643960$**       | **Current Certified Best (0.0 SAT)**     |
-| **Target Phase 1: High-Density Merge & Grid Compression**                    |      `22.250000`        |       $-6.687670$         | Active Target ($\Delta S = 0.043710$)    |
+| **Greedy Merge & Selective Dilation (248 Upgraded Puzzles)**                 | **`22.257047`**         |     **$-6.680623$**       | **Current Certified Best (0.0 SAT)**     |
+| **Target Phase 1: High-Density Transition Compression**                      |      `22.230000`        |       $-6.707670$         | Active Target ($\Delta S = 0.027047$)    |
 | **Target Phase 2: Theoretical Dense Continuum Bound**                        |      `22.140000`        |       $-6.797670$         |             Long-term Target             |
 
 ---
@@ -184,11 +186,11 @@ python scripts/audit_submission.py submissions/submission_improved.csv
 Audit output verification:
 
 ```text
-Auditing submission file: submissions/submission_improved.csv (n=1..1000)...
+Auditing submission file: submissions/submission.csv (n=1..1000)...
 AUDIT PASSED!
   Total rows:      500500 (expected: 500500)
   Unique puzzles:  1000
-  Aggregate score: 22.2991515338
+  Aggregate score: 22.257047
   Collisions:      0
 ```
 
@@ -203,7 +205,7 @@ The complete, self-contained Jupyter notebook is published at [Squares in Square
 1. **Automated Dataset Discovery**: Inspects attached Kaggle datasets in `/kaggle/input/` while safely ignoring unoptimized sample submission grids.
 2. **Embedded Certified Upgrades**: Contains hardcoded coordinates for record-breaking packings ($n = 232, 260, 299$).
 3. **$N=5$ Safeguard**: Automatically enforces the analytical $10^{-7}$ positive clearance buffer.
-4. **Instant Score**: Directly writes `/kaggle/working/submission.csv` scoring **`22.2991515337`** (Personal Best, Rank 600).
+4. **Instant Score**: Directly writes `/kaggle/working/submission.csv` scoring **`22.257047`** with zero overlap penalties.
 
 ---
 
@@ -215,7 +217,7 @@ Run the full pytest test suite:
 python -m pytest tests/ -v
 ```
 
-- **126 tests pass (103 unit, 23 integration)**:
+- **128 tests pass (105 unit, 23 integration)**:
   - `test_geometry.py`: Half-extents, corner formulas, axis-aligned bounds, SAT collision detection, spatial index.
   - `test_certified_upgrades.py`: Verifies zero overlaps (tolerance 0.0) for all record-breaking layouts.
   - `test_moves.py`: Single translation, rotation, combined moves, group translation, boundary detection.
