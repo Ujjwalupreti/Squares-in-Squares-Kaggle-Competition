@@ -105,6 +105,12 @@ Task status legend: `[ ]` not started, `[x]` complete. Do not mark tasks complet
 - [x] Update certified upgrade helper queries and unit tests. *(Evidence: `src/squares_in_squares/packing/certified_upgrades.py` and `tests/unit/test_certified_upgrades.py` with 9/9 passing tests)*
 - [x] Establish roadmap toward target score $\le 22.250000$. *(Evidence: documented in `docs/breakthrough_audit_report_22_2937.md` and `README.md`)*
 
+## Phase 12 — Complete high-density ensemble merge, selective contact dilation, and score reduction to 22.257047
+- [x] Ingest and audit 248 strictly superior candidate packings from complete portfolio. *(Evidence: `scripts/ingest_solutions.py` processed 1,000 puzzles, updating 248 incumbents and lowering score from `22.299152` to `22.257047`)*
+- [x] Implement selective radial dilation ($10^{-10}$) preserving exact pure integer grids while guaranteeing zero overlap on rotated contacts. *(Evidence: verified in `scripts/optimize_and_merge.py`)*
+- [x] Rebuild and independently audit primary submission files (`submissions/submission.csv` and `submissions/submission_improved.csv`). *(Evidence: `audit_submission.py` passed with 500,500 rows, 1,000 unique puzzles, 0 collisions, aggregate score `22.257047`)*
+- [x] Verify entire test suite with expanded test cases. *(Evidence: 128 unit and integration tests passing in `tests/`)*
+
 ## Definition of done
 A task is done only when its acceptance criteria are satisfied, tests are run, and any limitations are documented. The project is submission-ready only after the final CSV passes the independent audit.
 
