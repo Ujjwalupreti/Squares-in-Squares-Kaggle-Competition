@@ -87,9 +87,23 @@ def merge_packings(
     row_id = 0
     for n in range(1, 1001):
         coords = base_packings[n].copy()
-        if dilation_factor > 0:
+        is_grid = np.all(np.abs(coords[:, 2]) < 1e-4) and abs(compute_side(coords) - round(compute_side(coords))) < 1e-4
+        if not is_grid and dilation_factor > 0:
             center = coords[:, :2].mean(axis=0)
             coords[:, :2] = center + (coords[:, :2] - center) * (1.0 + dilation_factor)
+
+        # Analytical N=5 safeguard for strict mpmath interval arithmetic
+        if n == 5:
+            # Gobel's analytical solution: corners at (0.5, 0.5), (L-0.5, 0.5), (0.5, L-0.5), (L-0.5, L-0.5), center (L/2, L/2) rotated pi/4
+            # with L = 2.0 + 1/sqrt(2) + 1e-7
+            L5 = 2.0 + 1.0 / math.sqrt(2.0) + 1e-7
+            coords = np.array([
+                [0.5, 0.5, 0.0],
+                [L5 - 0.5, 0.5, 0.0],
+                [0.5, L5 - 0.5, 0.0],
+                [L5 - 0.5, L5 - 0.5, 0.0],
+                [L5 / 2.0, L5 / 2.0, math.pi / 4.0],
+            ], dtype=float)
 
         for sid in range(n):
             rows.append({
