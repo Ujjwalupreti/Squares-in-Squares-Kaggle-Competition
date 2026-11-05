@@ -130,6 +130,7 @@ def run_heavy_optimization(
     csv_path: Path = Path("submissions/submission_improved.csv"),
     max_workers: int | None = None,
     target_count: int = 50,
+    target_puzzles: list[int] | None = None,
 ):
     print("=" * 70)
     print("STARTING AUTONOMOUS MULTI-CORE HEAVY PACKING OPTIMIZER (OPTION A)")
@@ -162,7 +163,10 @@ def run_heavy_optimization(
             opportunities.append((n, slack, score_val, sq))
 
     opportunities.sort(key=lambda x: x[1], reverse=True)
-    selected_targets = opportunities[:target_count]
+    if target_puzzles is not None:
+        selected_targets = [x for x in opportunities if x[0] in target_puzzles]
+    else:
+        selected_targets = opportunities[:target_count]
 
     print(f"\nDispatched {len(selected_targets)} high-slack puzzles across {max_workers} worker processes.")
     print("Top targeted puzzles:", [x[0] for x in selected_targets[:15]])
@@ -233,4 +237,8 @@ def run_heavy_optimization(
 
 
 if __name__ == "__main__":
-    run_heavy_optimization()
+    targets = [int(x) for x in sys.argv[1:] if x.isdigit()]
+    if targets:
+        run_heavy_optimization(target_puzzles=targets)
+    else:
+        run_heavy_optimization()
