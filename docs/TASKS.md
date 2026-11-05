@@ -111,6 +111,16 @@ Task status legend: `[ ]` not started, `[x]` complete. Do not mark tasks complet
 - [x] Rebuild and independently audit primary submission files (`submissions/submission.csv` and `submissions/submission_improved.csv`). *(Evidence: `audit_submission.py` passed with 500,500 rows, 1,000 unique puzzles, 0 collisions, aggregate score `22.257047`)*
 - [x] Verify entire test suite with expanded test cases. *(Evidence: 128 unit and integration tests passing in `tests/`)*
 
+## Phase 13 — Autonomous First-Principles Optimization: Grid-Breaking, Pocket Insertion & Compaction to 22.185898
+- [ ] Implement robust Contact-LP Squeeze optimizer (`src/squares_in_squares/optimization/contact_lp.py`) using HiGHS convex compaction.
+- [ ] Implement parametric diagonal seam & stripe generator (`src/squares_in_squares/packing/diagonal_stripes.py`) for transition bands.
+- [ ] Implement pocket void detection and relaxation optimizer (`src/squares_in_squares/optimization/pocket_insertion.py`) for $n \to n+1$ growth.
+- [ ] Implement end-to-end transition optimization pipeline (`scripts/optimize_transitions.py`) with automatic SAT certification.
+- [ ] Add comprehensive unit and integration test suite (`tests/unit/test_diagonal_stripes.py`, `tests/unit/test_contact_lp.py`).
+- [ ] Execute targeted optimization across high-leverage transition puzzles ($n \in [184, 195]$, $[212, 224]$, $[242, 255]$).
+- [ ] Rebuild and audit submission CSVs and notebook with certified 0 collisions at tolerance 0.0.
+- [ ] Commit incrementally and push milestone progress to GitHub.
+
 ## Definition of done
 A task is done only when its acceptance criteria are satisfied, tests are run, and any limitations are documented. The project is submission-ready only after the final CSV passes the independent audit.
 
