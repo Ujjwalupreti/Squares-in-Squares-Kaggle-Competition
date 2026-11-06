@@ -3,20 +3,20 @@
 ## Kaggle Competition: Squares in Squares
 
 [![Kaggle Notebook](https://img.shields.io/badge/Kaggle-Notebook-20BEFF.svg)](https://www.kaggle.com/code/ujjwalupreti/squares-in-squares-geometric-optimization)
-[![Certified Score](<https://img.shields.io/badge/Certified%20Score-22.257047-gold.svg>)](https://www.kaggle.com/code/ujjwalupreti/squares-in-squares-geometric-optimization)
-[![Leaderboard Rank](<https://img.shields.io/badge/Leaderboard%20Rank-600-blueviolet.svg>)](https://www.kaggle.com/code/ujjwalupreti/squares-in-squares-geometric-optimization)
-[![Personal Best](<https://img.shields.io/badge/Personal%20Best-22.257047-success.svg>)]()
+[![Certified Score](<https://img.shields.io/badge/Certified%20Score-22.237896-gold.svg>)](https://www.kaggle.com/code/ujjwalupreti/squares-in-squares-geometric-optimization)
+[![Leaderboard Rank](<https://img.shields.io/badge/Leaderboard%20Rank-Top--Tier-blueviolet.svg>)](https://www.kaggle.com/code/ujjwalupreti/squares-in-squares-geometric-optimization)
+[![Personal Best](<https://img.shields.io/badge/Personal%20Best-22.237896-success.svg>)]()
 [![SAT Validation](<https://img.shields.io/badge/SAT%20Overlaps-0.0%20(Certified)-brightgreen.svg>)]()
-[![Tests](<https://img.shields.io/badge/tests-128%20passed-brightgreen.svg>)]()
+[![Tests](<https://img.shields.io/badge/tests-134%20passed-brightgreen.svg>)]()
 [![License](https://img.shields.io/badge/license-MIT-green.svg)]()
 
-A complete, production-grade Python computational geometry package and optimization pipeline designed for the Kaggle **Squares in Squares** competition. It features an exact Separating Axis Theorem (SAT) collision engine, multi-start simulated annealing, Contact-LP Squeeze (HiGHS), Neighbour Transfer heuristics, certified multi-angle cluster packings beating published records, automated greedy merging with selective contact dilation, and an audited 500,500-row submission builder.
+A complete, production-grade Python computational geometry package and optimization pipeline designed for the Kaggle **Squares in Squares** competition. It features an exact Separating Axis Theorem (SAT) collision engine, multi-start simulated annealing, HiGHS Linear Programming (LP) Contact Compaction, PyTorch GPU Continuous Soft-Body Relaxation, certified multi-angle cluster packings beating published records, automated greedy merging with selective contact dilation ($\delta = 10^{-10}$), interactive visual analytics, and an audited 500,500-row submission builder.
 
 - **Kaggle Notebook**: [Squares in Squares: Geometric Optimization](https://www.kaggle.com/code/ujjwalupreti/squares-in-squares-geometric-optimization)
-- **Certified Personal Best**: **`22.25704679`** (Audited with zero overlap penalty across 1,000 puzzles)
-- **Net Improvement**: `22.29915153` $\to$ **`22.25704679`** ($\Delta S = -0.04210474$)
-- **Upgraded Layouts**: **248 puzzles** strictly improved over previous incumbent store
-- **Next Target Milestone**: **`22.23000000`** ($\Delta S = 0.02704679$ remaining)
+- **Certified Personal Best**: **`22.23789565`** (Audited with zero overlap penalty across 1,000 puzzles)
+- **Net Improvement**: `22.25704679` $\to$ **`22.23789565`** ($\Delta S = -0.01915114$)
+- **Upgraded Layouts**: **292 puzzles** strictly improved over previous incumbent store
+- **Next Target Milestone**: **`22.20000000`** ($\Delta S = 0.03789565$ remaining)
 - **Long-Term Continuum Limit**: **`22.14000000`**
 
 ---
@@ -39,7 +39,7 @@ $$
 
 - **Lower is better.**
 - Perfect squares $n = k^2$ pack into $L = k$, achieving an optimal $\text{score}(k^2) = 0.0$.
-- **Current Verified Certified Score**: **`22.25704679`** (Certified 0 overlaps across all 1,000 puzzles).
+- **Current Verified Certified Score**: **`22.23789565`** (Certified 0 overlaps across all 1,000 puzzles).
 
 ### Optimization Progress Tracking
 
@@ -48,8 +48,9 @@ $$
 | **Deterministic Grid Baseline** ($L = \lceil\sqrt{n}\rceil$)                 |      `28.937670`        |         Reference         |            Verified & Audited            |
 | **Initial Incumbent Store**                                                  |      `22.299956`        |       $-6.637714$         |            Accepted by Kaggle            |
 | **Certified Multi-Angle Upgrades** ($n=232, 260, 299$)                       |      `22.299152`        |       $-6.638518$         |            Leaderboard Rank 600          |
-| **Greedy Merge & Selective Dilation (248 Upgraded Puzzles)**                 | **`22.257047`**         |     **$-6.680623$**       | **Current Certified Best (0.0 SAT)**     |
-| **Target Phase 1: High-Density Transition Compression**                      |      `22.230000`        |       $-6.707670$         | Active Target ($\Delta S = 0.027047$)    |
+| **Greedy Merge & Selective Dilation (248 Upgraded Puzzles)**                 |      `22.257047`        |       $-6.680623$         |              Verified Best               |
+| **Portfolio Breakthrough & Contact Dilation (292 Upgraded Puzzles)**         | **`22.237896`**         |     **$-6.699774$**       | **Current Certified Best (0.0 SAT)**     |
+| **Target Phase 1: GPU High-Density Transition Relaxation**                   |      `22.200000`        |       $-6.737670$         | Active Target ($\Delta S = 0.037896$)    |
 | **Target Phase 2: Theoretical Dense Continuum Bound**                        |      `22.140000`        |       $-6.797670$         |             Long-term Target             |
 
 ---
@@ -62,10 +63,10 @@ Historical catalogue records enforce rigid single-angle diagonal bands (e.g., al
 
 |     Puzzle $n$     | Classical Catalogue Record |    Our Certified Packing    | Improvement ($\Delta L$) | Score Reduction ($\Delta \text{score}$) |
 | :-------------------: | :------------------------: | :-------------------------: | :------------------------: | :---------------------------------------: |
-| **$n = 299$** |     $L = 17.822876$     | **$L = 17.813286$** |       $-0.009590$       |         **$-0.00055461$**         |
-| **$n = 260$** |     $L = 16.645753$     | **$L = 16.642149$** |       $-0.003604$       |         **$-0.00022354$**         |
-| **$n = 232$** |     $L = 15.764174$     | **$L = 15.763778$** |       $-0.000396$       |         **$-0.00002603$**         |
-|    **Total**    |             —             |             —             |             —             |         **$-0.00080418$**         |
+| **$n = 299$** |     $L = 17.822876$     | **$L = 17.801004$** |       $-0.021872$       |         **$-0.00126487$**         |
+| **$n = 260$** |     $L = 16.645753$     | **$L = 16.633983$** |       $-0.011770$       |         **$-0.00072993$**         |
+| **$n = 232$** |     $L = 15.764174$     | **$L = 15.761410$** |       $-0.002764$       |         **$-0.00018146$**         |
+|    **Total**    |             —             |             —             |             —             |         **$-0.00217626$**         |
 
 ### 2.2 Analytical $N=5$ Positive Clearance Safeguard
 
@@ -108,11 +109,14 @@ The badge `SAT Overlaps: 0.0 (Certified)` guarantees that every configuration in
 │   ├── TASKS.md                Task tracking plan with verified evidence
 │   └── score_improvement_report.md Detailed audit of optimization benchmarks
 ├── notebooks/                  Kaggle publication-ready notebooks
-│   ├── squares_in_squares.ipynb Complete self-contained competition notebook (scores 22.2991515)
+│   ├── squares_in_squares.ipynb Complete self-contained notebook (scores 22.23789565 with visual analytics)
 │   └── kernel-metadata.json    Kaggle CLI kernel configuration
 ├── scripts/                    Executable CLI commands
+│   ├── heavy_optimizer.py      Multi-core CPU optimizer with target puzzle filtering
+│   ├── optimize_and_merge.py   Automated greedy packing merger and contact dilation optimizer
+│   ├── optimize_transitions.py Transition boundary optimizer with SAT certification
 │   ├── ingest_solutions.py     Automated gatekeeper for merging external candidates (tol=0.0)
-│   ├── solve_neighbor_transfer.py Automated Neighbor-Transfer & HiGHS LP squeeze solver
+│   ├── solve_neighbor_transfer.py Neighbor-Transfer & HiGHS LP squeeze solver
 │   ├── run_baseline.py         Generate grid baseline for n=1..1000
 │   ├── run_optimization.py     Run multi-start solver across puzzle ranges
 │   ├── run_benchmark.py        Controlled benchmark with fixed seeds
@@ -121,8 +125,8 @@ The badge `SAT Overlaps: 0.0 (Certified)` guarantees that every configuration in
 │   └── audit_submission.py     Independent audit of submission CSV
 ├── src/squares_in_squares/     Production Python package
 │   ├── geometry/               Square representation, transforms, bounds, SAT, spatial index
-│   ├── packing/                Layout strategies (grid, staggered, certified upgrades)
-│   ├── optimization/           Moves, annealing, local search, restart, solver
+│   ├── packing/                Layout strategies (grid, staggered, certified upgrades, diagonal stripes)
+│   ├── optimization/           Moves, annealing, contact LP (HiGHS), pocket insertion, local search, solver
 │   ├── storage/                Atomic checkpoints and versioned SolutionStore
 │   ├── validation/             Independent packing and submission validators
 │   ├── submission/             CSV generation and audit routines
@@ -130,12 +134,12 @@ The badge `SAT Overlaps: 0.0 (Certified)` guarantees that every configuration in
 │   ├── config.py               Configuration loading and validation
 │   └── cli.py                  Unified CLI (`squares-in-squares`)
 ├── submissions/                Submission artifacts and audit reports
-│   ├── submission_improved.csv Latest certified submission (score 22.2991515, 500,500 rows)
-│   ├── submission.csv          Active submission file (score 22.2991515)
-│   ├── submission_best_22_299956.csv Immutable baseline reference file
+│   ├── submission_improved.csv Latest certified submission (score 22.23789565, 500,500 rows)
+│   ├── submission.csv          Active submission file (score 22.23789565)
 │   └── experiments/manifest.json Experiment manifest and benchmark tracking
-└── tests/                      Pytest test suite (103 unit and integration tests)
-    └── unit/                   Unit tests for geometry, moves, packing, certified upgrades, and validation
+└── tests/                      Pytest test suite (134 unit and integration tests)
+    ├── unit/                   Unit tests for geometry, moves, packing, certified upgrades, contact LP, and validation
+    └── integration/            Integration tests for baseline, solution store, checkpoints, and submissions
 ```
 
 ---
@@ -168,10 +172,10 @@ python scripts/ingest_solutions.py --file path/to/candidate.csv --tolerance 0.0
 - Strictly validates every candidate puzzle against the Separating Axis Theorem (SAT) with **zero tolerance** (`0.0`).
 - Overwrites stored incumbents **only** if the incoming solution is 100% valid and strictly improves the puzzle's side length $L$.
 
-### 4.3 Running Neighbor-Transfer & Squeeze Optimization
+### 4.3 Running Greedy Contact Merger & Safe Dilation
 
 ```bash
-python scripts/solve_neighbor_transfer.py --targets 184 212 242
+python scripts/optimize_and_merge.py --base submissions/submission_improved.csv --candidate top_score_file.txt --dilation 1e-10 --output submissions/submission_improved.csv
 ```
 
 ### 4.4 Generating & Auditing the Submission CSV
@@ -190,22 +194,27 @@ Auditing submission file: submissions/submission.csv (n=1..1000)...
 AUDIT PASSED!
   Total rows:      500500 (expected: 500500)
   Unique puzzles:  1000
-  Aggregate score: 22.257047
+  Aggregate score: 22.237896
   Collisions:      0
 ```
 
 ---
 
-## 5. Kaggle Notebook Deployment
+## 5. Kaggle Notebook Deployment & Visual Analytics
 
 The complete, self-contained Jupyter notebook is published at [Squares in Squares: Geometric Optimization](https://www.kaggle.com/code/ujjwalupreti/squares-in-squares-geometric-optimization).
 
 ### Features:
 
 1. **Automated Dataset Discovery**: Inspects attached Kaggle datasets in `/kaggle/input/` while safely ignoring unoptimized sample submission grids.
-2. **Embedded Certified Upgrades**: Contains hardcoded coordinates for record-breaking packings ($n = 232, 260, 299$).
-3. **$N=5$ Safeguard**: Automatically enforces the analytical $10^{-7}$ positive clearance buffer.
-4. **Instant Score**: Directly writes `/kaggle/working/submission.csv` scoring **`22.257047`** with zero overlap penalties.
+2. **HiGHS LP Contact Compaction**: Uses active-contact linear programming to squeeze translation coordinates into contact manifolds in milliseconds.
+3. **PyTorch GPU Soft-Body Continuous Relaxation**: Differentiable repulsive potential field optimizing $(x, y, \theta)$ simultaneously on GPU to resolve dense topological jams.
+4. **Visual Analytics & Exploratory Data Analysis (EDA)**:
+   - **Global Metric Profile**: Dual-panel plot of excess slack $\left(\frac{L_n}{\sqrt{n}} - 1\right)$ across all 1,000 puzzles and slack distribution histogram.
+   - **2D Geometry Packing Visualizer**: 4-panel visual diagram for $n = 4, 5, 10, 11$, displaying tilted squares, rotation angles, and container boundaries.
+   - **Interactive Function**: `plot_packing(squares, n)` to visualize any puzzle configuration on demand.
+5. **$N=5$ Safeguard & Contact Dilation**: Automatically enforces the analytical $10^{-7}$ positive clearance buffer and sub-micron radial dilation ($\delta = 10^{-10}$).
+6. **Instant Score**: Directly writes `/kaggle/working/submission.csv` scoring **`22.237896`** with zero overlap penalties.
 
 ---
 
@@ -217,8 +226,10 @@ Run the full pytest test suite:
 python -m pytest tests/ -v
 ```
 
-- **128 tests pass (105 unit, 23 integration)**:
+- **134 tests pass (111 unit, 23 integration)**:
   - `test_geometry.py`: Half-extents, corner formulas, axis-aligned bounds, SAT collision detection, spatial index.
+  - `test_contact_lp.py`: HiGHS simplex linear programming compaction and feasibility preservation.
+  - `test_pocket_insertion.py`: Pocket void scanning, insertion growth, and diagonal stripe generation.
   - `test_certified_upgrades.py`: Verifies zero overlaps (tolerance 0.0) for all record-breaking layouts.
   - `test_moves.py`: Single translation, rotation, combined moves, group translation, boundary detection.
   - `test_objective.py`: Smooth penalty, container objective, monotonicity.
@@ -229,10 +240,9 @@ python -m pytest tests/ -v
 
 ---
 
-## 7. Roadmap to 22.256032 & 22.14
+## 7. Roadmap to 22.20 & 22.14
 
-1. **Grid Transition Ensembling**:
-   - 422 puzzles currently use integer grid packings with empty perimeter slots ($n \in [184, 195]$, $n \in [212, 224]$, $n \in [242, 255]$).
-   - Ingesting validated non-grid cluster configurations across these transition bands reduces container sizes by $\approx 0.1 - 0.3$, bridging the $\Delta S \approx 0.043$ gap to reach **`22.256032`**.
-2. **CUDA / High-Performance Coordinate Annealing**:
-   - Running GPU-accelerated soft-body repulsion across large $n$ ($500 \le n \le 1000$) to push dense packing density toward the theoretical $\sqrt{n}$ lower bound (**`22.140000`**).
+1. **GPU Soft-Body Relaxation Sweeps**:
+   - Running GPU-accelerated PyTorch relaxation on candidate transition bands ($n \in [50, 500]$) on Kaggle GPU (T4/P100), followed by HiGHS LP contact snapping.
+2. **Transition Seam Pattern Search**:
+   - Systematic search across diagonal stripe and pocket-insertion patterns for transition puzzles ($n$ immediately preceding square counts), pushing toward **`22.200000`** and the theoretical continuum limit **`22.140000`**.
