@@ -3,9 +3,9 @@
 ## Kaggle Competition: Squares in Squares
 
 [![Kaggle Notebook](https://img.shields.io/badge/Kaggle-Notebook-20BEFF.svg)](https://www.kaggle.com/code/ujjwalupreti/squares-in-squares-geometric-optimization)
-[![Certified Score](<https://img.shields.io/badge/Certified%20Score-22.237896-gold.svg>)](https://www.kaggle.com/code/ujjwalupreti/squares-in-squares-geometric-optimization)
+[![Certified Score](<https://img.shields.io/badge/Certified%20Score-22.223867-gold.svg>)](https://www.kaggle.com/code/ujjwalupreti/squares-in-squares-geometric-optimization)
 [![Leaderboard Rank](<https://img.shields.io/badge/Leaderboard%20Rank-Top--Tier-blueviolet.svg>)](https://www.kaggle.com/code/ujjwalupreti/squares-in-squares-geometric-optimization)
-[![Personal Best](<https://img.shields.io/badge/Personal%20Best-22.237896-success.svg>)]()
+[![Personal Best](<https://img.shields.io/badge/Personal%20Best-22.223867-success.svg>)]()
 [![SAT Validation](<https://img.shields.io/badge/SAT%20Overlaps-0.0%20(Certified)-brightgreen.svg>)]()
 [![Tests](<https://img.shields.io/badge/tests-134%20passed-brightgreen.svg>)]()
 [![License](https://img.shields.io/badge/license-MIT-green.svg)]()
@@ -13,10 +13,10 @@
 A complete, production-grade Python computational geometry package and optimization pipeline designed for the Kaggle **Squares in Squares** competition. It features an exact Separating Axis Theorem (SAT) collision engine, multi-start simulated annealing, HiGHS Linear Programming (LP) Contact Compaction, PyTorch GPU Continuous Soft-Body Relaxation, certified multi-angle cluster packings beating published records, automated greedy merging with selective contact dilation ($\delta = 10^{-10}$), interactive visual analytics, and an audited 500,500-row submission builder.
 
 - **Kaggle Notebook**: [Squares in Squares: Geometric Optimization](https://www.kaggle.com/code/ujjwalupreti/squares-in-squares-geometric-optimization)
-- **Certified Personal Best**: **`22.23789565`** (Audited with zero overlap penalty across 1,000 puzzles)
-- **Net Improvement**: `22.25704679` $\to$ **`22.23789565`** ($\Delta S = -0.01915114$)
-- **Upgraded Layouts**: **292 puzzles** strictly improved over previous incumbent store
-- **Next Target Milestone**: **`22.20000000`** ($\Delta S = 0.03789565$ remaining)
+- **Certified Personal Best**: **`22.22386681`** (Audited with zero overlap penalty across 1,000 puzzles)
+- **Net Improvement**: `22.23789565` $\to$ **`22.22386681`** ($\Delta S = -0.01402885$)
+- **Upgraded Layouts**: **120 puzzles** strictly improved over previous incumbent store
+- **Next Target Milestone**: **`22.21000000`** ($\Delta S = 0.01386681$ remaining)
 - **Long-Term Continuum Limit**: **`22.14000000`**
 
 ---
@@ -39,7 +39,7 @@ $$
 
 - **Lower is better.**
 - Perfect squares $n = k^2$ pack into $L = k$, achieving an optimal $\text{score}(k^2) = 0.0$.
-- **Current Verified Certified Score**: **`22.23789565`** (Certified 0 overlaps across all 1,000 puzzles).
+- **Current Verified Certified Score**: **`22.22386681`** (Certified 0 overlaps across all 1,000 puzzles).
 
 ### Optimization Progress Tracking
 
@@ -49,8 +49,9 @@ $$
 | **Initial Incumbent Store**                                                  |      `22.299956`        |       $-6.637714$         |            Accepted by Kaggle            |
 | **Certified Multi-Angle Upgrades** ($n=232, 260, 299$)                       |      `22.299152`        |       $-6.638518$         |            Leaderboard Rank 600          |
 | **Greedy Merge & Selective Dilation (248 Upgraded Puzzles)**                 |      `22.257047`        |       $-6.680623$         |              Verified Best               |
-| **Portfolio Breakthrough & Contact Dilation (292 Upgraded Puzzles)**         | **`22.237896`**         |     **$-6.699774$**       | **Current Certified Best (0.0 SAT)**     |
-| **Target Phase 1: GPU High-Density Transition Relaxation**                   |      `22.200000`        |       $-6.737670$         | Active Target ($\Delta S = 0.037896$)    |
+| **Portfolio Breakthrough (292 Upgraded Puzzles)**                            |      `22.237896`        |       $-6.699774$         |              Audited Baseline            |
+| **Border Extension & Multi-Angle Compaction (120 Upgraded Puzzles)**         | **`22.223867`**         |     **$-6.713803$**       | **Current Certified Best (0.0 SAT)**     |
+| **Target Phase 1: Contact-LP Compaction on 418 Grid Puzzles**                |      `22.210000`        |       $-6.727670$         | Active Target ($\Delta S = 0.013867$)    |
 | **Target Phase 2: Theoretical Dense Continuum Bound**                        |      `22.140000`        |       $-6.797670$         |             Long-term Target             |
 
 ---
@@ -134,8 +135,8 @@ The badge `SAT Overlaps: 0.0 (Certified)` guarantees that every configuration in
 │   ├── config.py               Configuration loading and validation
 │   └── cli.py                  Unified CLI (`squares-in-squares`)
 ├── submissions/                Submission artifacts and audit reports
-│   ├── submission_improved.csv Latest certified submission (score 22.23789565, 500,500 rows)
-│   ├── submission.csv          Active submission file (score 22.23789565)
+│   ├── submission_improved.csv Latest certified submission (score 22.22386681, 500,500 rows)
+│   ├── submission.csv          Active submission file (score 22.22386681)
 │   └── experiments/manifest.json Experiment manifest and benchmark tracking
 └── tests/                      Pytest test suite (134 unit and integration tests)
     ├── unit/                   Unit tests for geometry, moves, packing, certified upgrades, contact LP, and validation

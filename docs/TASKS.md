@@ -128,6 +128,14 @@ Task status legend: `[ ]` not started, `[x]` complete. Do not mark tasks complet
 - [x] Enhance Kaggle notebook (`notebooks/squares_in_squares.ipynb`) with comprehensive educational theory, global metric slack analysis plot, and multi-panel 2D packing visualizer. *(Evidence: visual analytics and interactive `plot_packing` implemented and executed)*
 - [x] Rebuild and independently audit primary submissions (`submissions/submission.csv` and `submissions/submission_improved.csv`). *(Evidence: 500,500 rows, 1,000 unique puzzles, 0 overlaps)*
 
+## Phase 15 — Reading Room research synthesis, border extension chain resolution, and breakthrough to 22.22386681
+- [x] Rigorously resolve Question 1: mathematically derive the border extension mechanism ($L(n) = L_0 + m$), prove fractional invariance ($\text{frac}(L) = 0.59137815$), and establish root seed puzzle $n=123$ ($K=11, D=2, \theta = 40.9745^\circ$) for chain $259 \to 445 \to 488 \to 681 \to 734 \to 967$. *(Evidence: catalogued 11 family members, verified $22m + m^2$ area growth in `Reading_Room_And_Chain_Analysis.md`)*
+- [x] Rigorously resolve Question 2: formalize the geometric trade-off for $n = K^2 + 1 \dots K^2 + K$, separating boundary wedge termination (rational angle selection eliminating corner triangular voids for $D=1, 2$) from inter-row groove nesting (achieving pitch $1/\sqrt{2}$ for $D \ge 3$). *(Evidence: analyzed $n=17, 26, 37, 50$ configurations, verified Pythagorean $\arctan(3/4)$ angle at $n=50$)*
+- [x] Synthesize foundational literature from The Reading Room: Erich Friedman survey, The Squares Project Atlas, Wolfram MathWorld Göbel formulas, and Evan Daniel Interactive Atlas. *(Evidence: documented in `Reading_Room_And_Chain_Analysis.md`)*
+- [x] Compare candidate dataset (`New_test_submission.txt`) against active baseline (`submissions/submission.csv`): confirm 120 strictly superior puzzles, 0 regressions, and net reduction $\Delta S = -0.01402885$. *(Evidence: certified aggregate score dropped from `22.23789565` to `22.22386681`)*
+- [x] Audit all 120 candidate packings for SAT collisions: verified 0 overlaps at tolerance 0.0 and $10^{-9}$. *(Evidence: tested and certified 100% overlap-free)*
+- [x] Update active submissions (`submissions/submission.csv`, `submissions/submission_improved.csv`) and notebook pipeline. *(Evidence: generated compliant 500,500-row submission files scoring `22.22386681`)*
+
 ## Definition of done
 A task is done only when its acceptance criteria are satisfied, tests are run, and any limitations are documented. The project is submission-ready only after the final CSV passes the independent audit.
 
