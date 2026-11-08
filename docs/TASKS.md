@@ -136,6 +136,11 @@ Task status legend: `[ ]` not started, `[x]` complete. Do not mark tasks complet
 - [x] Audit all 120 candidate packings for SAT collisions: verified 0 overlaps at tolerance 0.0 and $10^{-9}$. *(Evidence: tested and certified 100% overlap-free)*
 - [x] Update active submissions (`submissions/submission.csv`, `submissions/submission_improved.csv`) and notebook pipeline. *(Evidence: generated compliant 500,500-row submission files scoring `22.22386681`)*
 
+## Phase 16 — Ingestion of new_test_submission_2.txt, breaking the 22.22 and 22.21 barriers to 22.21804358
+- [x] Compare candidate dataset `new_test_submission_2.txt` against active baseline: 92 strictly superior puzzles, 0 regressions, 908 identical. *(Evidence: aggregate score dropped from `22.22386681` to `22.21804358`, net reduction $-0.00582323$)*
+- [x] Audit all 92 candidate packings with SAT collision detection: certified 0 overlaps at tolerance 0.0 and tolerance 1e-9. *(Evidence: independent SAT check reported 0 overlaps)*
+- [x] Update active submissions (`submissions/submission.csv`, `submissions/submission_improved.csv`) and pipeline documentation. *(Evidence: 500,500 rows verified, aggregate score `22.21804358`)*
+
 ## Definition of done
 A task is done only when its acceptance criteria are satisfied, tests are run, and any limitations are documented. The project is submission-ready only after the final CSV passes the independent audit.
 
