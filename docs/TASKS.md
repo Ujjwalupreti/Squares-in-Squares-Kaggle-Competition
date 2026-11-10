@@ -141,6 +141,13 @@ Task status legend: `[ ]` not started, `[x]` complete. Do not mark tasks complet
 - [x] Audit all 92 candidate packings with SAT collision detection: certified 0 overlaps at tolerance 0.0 and tolerance 1e-9. *(Evidence: independent SAT check reported 0 overlaps)*
 - [x] Update active submissions (`submissions/submission.csv`, `submissions/submission_improved.csv`) and pipeline documentation. *(Evidence: 500,500 rows verified, aggregate score `22.21804358`)*
 
+## Phase 17 — Ingestion of new_mark_submission.txt, filtering 17 invalid traps, and breakthrough to 22.20480275
+- [x] Ingest and analyze candidate dataset `new_mark_submission.txt` against `submissions/submission_improved.csv`: 121 proposed improvements, 0 regressions, 879 tied. *(Evidence: comparative analysis across all 1,000 puzzles)*
+- [x] Uncover critical validation vulnerability: detected 17 invalid overlapping configurations in raw `new_mark_submission.txt` (including raw unbuffered $n=5$ Göbel overlapping by 4 corner contacts), which would incur $+0.44$ grid ceiling penalty on Kaggle. *(Evidence: independent SAT audit detected overlaps on $n=5, 10, 54, 69, 146, 234, 300, 330, 533, 636, 740, 748, 843, 844, 901, 911, 969$)*
+- [x] Execute certified selective merge: adopted 120 certified overlap-free improvements while rejecting all 17 invalid configurations in favor of certified incumbent layouts and analytical Göbel positive clearance buffer ($\varepsilon = 10^{-7}$). *(Evidence: aggregate score reduced from `22.21804358` to `22.20480275`, net gain $\Delta S = -0.01324083$)*
+- [x] Canonicalize and apply safety dilation ($\delta = 10^{-10}$): shifted all packings to lower-left origin $(0, 0)$, normalized rotation angles to $[0, \pi/2)$, and applied selective radial expansion. *(Evidence: verified 0 SAT overlaps across all 1,000 puzzles at tolerance 0.0)*
+- [x] Update primary submission targets (`submissions/submission.csv`, `submissions/submission_improved.csv`) and Kaggle notebook candidate discovery. *(Evidence: certified 500,500-row CSV generated, notebook updated)*
+
 ## Definition of done
 A task is done only when its acceptance criteria are satisfied, tests are run, and any limitations are documented. The project is submission-ready only after the final CSV passes the independent audit.
 
