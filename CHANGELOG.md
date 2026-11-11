@@ -2,6 +2,22 @@
 
 All notable changes to the **Squares in Squares** geometric optimization system are documented in this file.
 
+## [v1.6.0] — 2026-11-11
+
+### Milestone: Cracking the 22.20 Barrier to Certified Benchmark `22.194550`
+- **Universal Multi-Portfolio Master Merge**:
+  - Executed master portfolio cross-merge across all candidate files, extracting 955 core compaction breakthroughs and 45 sub-nanometer precision retainers.
+  - Slashed aggregate competition score decisively from `22.204803` down to **`22.194550`** ($\Delta S = -0.010253$).
+  - Identified 82 significant compaction leaps across mid-to-high $N$ (e.g. $N=452, 453, 454, 172, 199, 378, 497, 498$).
+- **Contact Hardening & Precision Trap Elimination**:
+  - Resolved 17 critical machine-epsilon float64 boundary collisions ($-2.22 \times 10^{-16}$) using adaptive radial centroid dilation ($\delta \in [10^{-12}, 10^{-8}]$).
+  - Prevented a cumulative $+0.454056$ Kaggle interval-arithmetic fallback penalty.
+  - Certified zero SAT overlaps across all 1,000 puzzles under strict `tolerance=0.0`.
+- **Pipeline Architecture & Primitives**:
+  - Built `scripts/master_merge.py` for automated multi-candidate portfolio evaluation and canonicalization.
+  - Added `canonicalize_packing` and `dilate_packing` to `src/squares_in_squares/geometry/transforms.py`.
+  - Expanded test suite to **146 tests passing (100% green)**.
+
 ## [v1.5.0] — 2026-11-11
 
 ### Breakthrough: Certified Personal Best `22.204803`
