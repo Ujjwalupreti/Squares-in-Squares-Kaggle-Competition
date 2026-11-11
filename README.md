@@ -3,22 +3,22 @@
 ## Kaggle Competition: Squares in Squares
 
 [![Kaggle Notebook](https://img.shields.io/badge/Kaggle-Notebook-20BEFF.svg)](https://www.kaggle.com/code/ujjwalupreti/squares-in-squares-geometric-optimization)
-[![Certified Score](<https://img.shields.io/badge/Certified%20Score-22.204803-gold.svg>)](https://www.kaggle.com/code/ujjwalupreti/squares-in-squares-geometric-optimization)
+[![Certified Score](<https://img.shields.io/badge/Certified%20Score-22.194550-gold.svg>)](https://www.kaggle.com/code/ujjwalupreti/squares-in-squares-geometric-optimization)
 [![Leaderboard Rank](<https://img.shields.io/badge/Leaderboard%20Rank-Top--Tier-blueviolet.svg>)](https://www.kaggle.com/code/ujjwalupreti/squares-in-squares-geometric-optimization)
-[![Personal Best](<https://img.shields.io/badge/Personal%20Best-22.204803-success.svg>)]()
+[![Personal Best](<https://img.shields.io/badge/Personal%20Best-22.194550-success.svg>)]()
 [![SAT Validation](<https://img.shields.io/badge/SAT%20Overlaps-0.0%20(Certified)-brightgreen.svg>)]()
-[![Tests](<https://img.shields.io/badge/tests-143%20passed-brightgreen.svg>)]()
+[![Tests](<https://img.shields.io/badge/tests-146%20passed-brightgreen.svg>)]()
 [![License](https://img.shields.io/badge/license-MIT-green.svg)]()
 
 A complete, production-grade Python computational geometry package and optimization pipeline designed for the Kaggle **Squares in Squares** competition. It features an exact Separating Axis Theorem (SAT) collision engine, multi-start simulated annealing, HiGHS Linear Programming (LP) Contact Compaction, PyTorch GPU Continuous Soft-Body Relaxation, certified multi-angle cluster packings beating published records, automated greedy merging with selective contact dilation ($\delta = 10^{-10}$), interactive visual analytics, and an audited 500,500-row submission builder.
 
 - **Kaggle Notebook**: [Squares in Squares: Geometric Optimization](https://www.kaggle.com/code/ujjwalupreti/squares-in-squares-geometric-optimization)
-- **Certified Personal Best**: **`22.20480275`** (Audited with zero overlap penalty across 1,000 puzzles)
-- **Net Improvement**: `22.21804358` $\to$ **`22.20480275`** ($\Delta S = -0.01324083$)
-- **Upgraded Layouts**: **120 puzzles** strictly improved over previous incumbent store
-- **Milestone Achieved**: Decisively shattered the **`22.21`** barrier towards **`22.204`**!
-- **Next Target Milestone**: **`22.20000000`** ($\Delta S = 0.00480275$ remaining)
-- **Long-Term Continuum Limit**: **`22.14000000`**
+- **Certified Personal Best**: **`22.19455003`** (Audited with zero overlap penalty across 1,000 puzzles)
+- **Net Improvement**: `22.20480275` $\to$ **`22.19455003`** ($\Delta S = -0.01025272$)
+- **Upgraded Layouts**: **82 major structural leaps** + **45 sub-nanometer precision retainers**
+- **Milestone Achieved**: Decisively shattered the **`22.20`** barrier to **`22.194550`**!
+- **Next Target Milestone**: **`22.15000000`**
+- **Long-Term Continuum Limit**: **`22.12151795`**
 
 ---
 
@@ -40,7 +40,7 @@ $$
 
 - **Lower is better.**
 - Perfect squares $n = k^2$ pack into $L = k$, achieving an optimal $\text{score}(k^2) = 0.0$.
-- **Current Verified Certified Score**: **`22.20480275`** (Certified 0 overlaps across all 1,000 puzzles).
+- **Current Verified Certified Score**: **`22.19455003`** (Certified 0 overlaps across all 1,000 puzzles).
 
 ### Optimization Progress Tracking
 
@@ -53,9 +53,11 @@ $$
 | **Portfolio Breakthrough (292 Upgraded Puzzles)**                            |      `22.237896`        |       $-6.699774$         |              Audited Baseline            |
 | **Border Extension & Multi-Angle Compaction (120 Upgraded Puzzles)**         |      `22.223867`        |       $-6.713803$         |              Audited Baseline            |
 | **Breakthrough: 92 Upgraded Puzzles (Cracking 22.22 & 22.21 Barriers)**     |      `22.218044`        |       $-6.719626$         |              Audited Milestone           |
-| **Phase 17 Breakthrough: 120 Certified Upgrades (Cracking 22.21 to 22.204)** | **`22.204803`**         |     **$-6.732867$**       | **Current Certified Best (0.0 SAT)**     |
-| **Target Phase 1: Contact-LP Compaction on Remaining High-Slack Grids**      |      `22.200000`        |       $-6.737670$         | Active Target ($\Delta S = 0.004803$)    |
-| **Target Phase 2: Theoretical Dense Continuum Bound**                        |      `22.140000`        |       $-6.797670$         |             Long-term Target             |
+| **Phase 17 Breakthrough: 120 Certified Upgrades (Cracking 22.21 to 22.204)** |      `22.204803`        |       $-6.732867$         |              Audited Milestone           |
+| **Phase 18 Master Merge: Cracking the 22.20 Barrier to 22.194550**           | **`22.194550`**         |     **$-6.743120$**       | **Current Certified Best (0.0 SAT)**     |
+| **Target Phase 1: High-K Transition Breakthroughs (n=90, 111, 133, ...)**    |      `22.150000`        |       $-6.787670$         | Active Target ($\Delta S = 0.044550$)    |
+| **Target Phase 2: Asymmetric Boundary Continuum Frontier**                  |      `22.121518`        |       $-6.816152$         |             Long-term Target             |
+
 
 ---
 
