@@ -80,3 +80,43 @@ def corners_vectorized(squares: np.ndarray) -> np.ndarray:
             result[:, idx, 1] = y + a * e1y + b * e2y
             idx += 1
     return result
+
+
+def canonicalize_packing(squares: np.ndarray) -> np.ndarray:
+    """Canonicalize packing coordinates to lower-left origin (0, 0) and normalize angles.
+
+    Args:
+        squares: array of shape (n, 3) with columns [x, y, angle].
+
+    Returns:
+        Canonicalized packing anchored at (0, 0) with angles in [0, pi/2).
+    """
+    coords = squares.copy()
+    c = np.abs(np.cos(coords[:, 2]))
+    s = np.abs(np.sin(coords[:, 2]))
+    h = 0.5 * (c + s)
+    coords[:, 0] -= np.min(coords[:, 0] - h)
+    coords[:, 1] -= np.min(coords[:, 1] - h)
+    coords[:, 2] = np.mod(coords[:, 2], np.pi / 2.0)
+    return coords
+
+
+def dilate_packing(squares: np.ndarray, dilation_factor: float) -> np.ndarray:
+    """Dilate square centers radially from centroid to ensure strict SAT non-overlap.
+
+    Args:
+        squares: array of shape (n, 3) with columns [x, y, angle].
+        dilation_factor: relative radial expansion factor.
+
+    Returns:
+        Dilated and re-canonicalized packing array.
+    """
+    if dilation_factor <= 0:
+        return canonicalize_packing(squares)
+    coords = squares.copy()
+    cx = float(np.mean(coords[:, 0]))
+    cy = float(np.mean(coords[:, 1]))
+    coords[:, 0] = cx + (coords[:, 0] - cx) * (1.0 + dilation_factor)
+    coords[:, 1] = cy + (coords[:, 1] - cy) * (1.0 + dilation_factor)
+    return canonicalize_packing(coords)
+
