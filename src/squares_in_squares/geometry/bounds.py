@@ -86,3 +86,67 @@ def container_side_length_from_corners(squares: np.ndarray) -> float:
     ymax = float(np.max(all_y))
 
     return max(xmax - xmin, ymax - ymin)
+
+
+def batch_container_side_lengths(packings: dict[int, np.ndarray] | list[np.ndarray]) -> dict[int, float] | list[float]:
+    """Compute container side lengths for a batch of packings.
+
+    Args:
+        packings: mapping of puzzle id to packing array, or list of packing arrays.
+
+    Returns:
+        Mapping or list of container side lengths corresponding to input.
+    """
+    if isinstance(packings, dict):
+        return {k: container_side_length(v) for k, v in packings.items()}
+    return [container_side_length(p) for p in packings]
+
+
+def compute_minimum_separation(squares: np.ndarray) -> float:
+    """Compute the minimum pairwise separation (clearance) across all squares in a packing.
+
+    Uses the Separating Axis Theorem (SAT). For each pair of unit squares, the clearance
+    is defined as the maximum separation distance over the 4 candidate normal axes.
+    - Clearance > 0: pair is strictly disjoint with a positive buffer.
+    - Clearance == 0: pair is in exact mathematical contact.
+    - Clearance < 0: pair penetrates/overlaps by at least |clearance|.
+
+    Args:
+        squares: array of shape (n, 3) with [x, y, angle] in radians.
+
+    Returns:
+        Minimum clearance across all pairs in the packing, or +inf if n <= 1.
+    """
+    n = len(squares)
+    if n <= 1:
+        return float("inf")
+
+    c = np.cos(squares[:, 2])
+    s = np.sin(squares[:, 2])
+    ux = np.column_stack([c, s])
+    uy = np.column_stack([-s, c])
+    centers = squares[:, :2]
+
+    min_overall_sep = float("inf")
+
+    for i in range(n):
+        for j in range(i + 1, n):
+            d = centers[j] - centers[i]
+            # Fast bounding rejection
+            if abs(d[0]) > 1.45 and abs(d[1]) > 1.45:
+                continue
+
+            axes = (ux[i], uy[i], ux[j], uy[j])
+            max_axis_gap = -float("inf")
+            for ax in axes:
+                r_i = 0.5 * (abs(float(np.dot(ux[i], ax))) + abs(float(np.dot(uy[i], ax))))
+                r_j = 0.5 * (abs(float(np.dot(ux[j], ax))) + abs(float(np.dot(uy[j], ax))))
+                dist_proj = abs(float(np.dot(d, ax)))
+                gap = dist_proj - (r_i + r_j)
+                if gap > max_axis_gap:
+                    max_axis_gap = gap
+
+            if max_axis_gap < min_overall_sep:
+                min_overall_sep = max_axis_gap
+
+    return min_overall_sep
