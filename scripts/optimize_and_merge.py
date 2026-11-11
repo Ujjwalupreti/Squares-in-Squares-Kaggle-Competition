@@ -21,6 +21,7 @@ if str(_SRC_DIR) not in sys.path:
     sys.path.insert(0, str(_SRC_DIR))
 
 from squares_in_squares.geometry.bounds import container_side_length
+from squares_in_squares.validation.packing_validator import validate_packing_geometry
 
 
 def compute_side(squares: np.ndarray) -> float:
@@ -38,13 +39,17 @@ def compute_side(squares: np.ndarray) -> float:
 def merge_packings(
     base_csv: Path | str,
     candidate_file: Path | str,
-    output_csv: Path | str,
-    dilation_factor: float = 1e-11,
+    output_csv: Path | str | None = None,
+    dilation_factor: float = 1e-10,
+    tolerance: float = 0.0,
+    report_path: Path | str | None = None,
+    dry_run: bool = False,
 ) -> tuple[float, float, int]:
-    """Merge candidate packings into base submission if strictly superior."""
+    """Merge candidate packings into base submission if strictly superior and collision-free."""
     base_csv = Path(base_csv)
     candidate_file = Path(candidate_file)
-    output_csv = Path(output_csv)
+    if output_csv is not None:
+        output_csv = Path(output_csv)
 
     print(f"Loading base submission: {base_csv}...")
     df_base = pd.read_csv(base_csv)
@@ -63,22 +68,57 @@ def merge_packings(
     print(f"Initial aggregate score: {init_score:.8f}")
 
     improvements = []
+    rejected_overlaps = []
     for n in range(1, 1001):
         curr_side = compute_side(base_packings[n])
         if n in cand_packings:
             cand_side = compute_side(cand_packings[n])
             if cand_side < curr_side - 1e-6:
-                gain = (curr_side - cand_side) / math.sqrt(n)
-                improvements.append((n, curr_side, cand_side, gain))
-                base_packings[n] = cand_packings[n]
+                # Rigorous SAT feasibility check before accepting
+                vr = validate_packing_geometry(cand_packings[n], n, tolerance=tolerance)
+                if vr.valid:
+                    gain = (curr_side - cand_side) / math.sqrt(n)
+                    improvements.append((n, curr_side, cand_side, gain))
+                    base_packings[n] = cand_packings[n]
+                else:
+                    rejected_overlaps.append((n, curr_side, cand_side, vr.errors))
 
-    print(f"Replaced {len(improvements)} puzzles with improved configurations.")
-    for n, old_l, new_l, g in improvements:
+    print(f"Accepted {len(improvements)} strictly superior collision-free configurations.")
+    if rejected_overlaps:
+        print(f"Rejected {len(rejected_overlaps)} candidate configurations due to SAT collision/overlap.")
+        for n, old_l, cand_l, errs in rejected_overlaps[:5]:
+            print(f"  [REJECTED] n={n:3d}: proposed L {cand_l:.5f} < {old_l:.5f} but failed: {errs}")
+
+    for n, old_l, new_l, g in improvements[:15]:
         print(f"  n={n:3d}: L {old_l:.5f} -> {new_l:.5f} (gain: {g:.6f})")
+    if len(improvements) > 15:
+        print(f"  ... and {len(improvements) - 15} more improvements.")
 
     new_score = sum(compute_side(base_packings[n]) / math.sqrt(n) - 1.0 for n in range(1, 1001))
     print(f"\nNet improvement: -{init_score - new_score:.8f}")
     print(f"New aggregate score: {new_score:.8f}")
+
+    if report_path is not None:
+        report_p = Path(report_path)
+        report_p.parent.mkdir(parents=True, exist_ok=True)
+        with open(report_p, "w", encoding="utf-8") as f:
+            f.write("# Merge & Optimization Audit Report\n\n")
+            f.write(f"- Base submission: `{base_csv.name}`\n")
+            f.write(f"- Candidate file: `{candidate_file.name}`\n")
+            f.write(f"- Initial score: `{init_score:.8f}`\n")
+            f.write(f"- New score: `{new_score:.8f}`\n")
+            f.write(f"- Net score reduction: `-{init_score - new_score:.8f}`\n")
+            f.write(f"- Accepted upgrades: `{len(improvements)}`\n")
+            f.write(f"- Rejected overlaps: `{len(rejected_overlaps)}`\n\n")
+            f.write("## Top Accepted Improvements\n\n")
+            f.write("| Puzzle $n$ | Previous $L$ | New $L$ | Score Gain |\n| :---: | :---: | :---: | :---: |\n")
+            for n, old_l, new_l, g in sorted(improvements, key=lambda x: x[3], reverse=True)[:25]:
+                f.write(f"| {n} | {old_l:.6f} | {new_l:.6f} | {g:.8f} |\n")
+        print(f"Wrote audit report to {report_p}.")
+
+    if dry_run or output_csv is None:
+        print("Dry run requested; no submission file written.")
+        return init_score, new_score, len(improvements)
 
     # Build submission with center dilation for exact contact safety
     print(f"Writing output to {output_csv} (dilation={dilation_factor})...")
@@ -94,8 +134,6 @@ def merge_packings(
 
         # Analytical N=5 safeguard for strict mpmath interval arithmetic
         if n == 5:
-            # Gobel's analytical solution: corners at (0.5, 0.5), (L-0.5, 0.5), (0.5, L-0.5), (L-0.5, L-0.5), center (L/2, L/2) rotated pi/4
-            # with L = 2.0 + 1/sqrt(2) + 1e-7
             L5 = 2.0 + 1.0 / math.sqrt(2.0) + 1e-7
             coords = np.array([
                 [0.5, 0.5, 0.0],
@@ -105,14 +143,24 @@ def merge_packings(
                 [L5 / 2.0, L5 / 2.0, math.pi / 4.0],
             ], dtype=float)
 
+        # Canonicalize to lower-left origin
+        c = np.abs(np.cos(coords[:, 2]))
+        s = np.abs(np.sin(coords[:, 2]))
+        h = 0.5 * (c + s)
+        min_x = np.min(coords[:, 0] - h)
+        min_y = np.min(coords[:, 1] - h)
+        coords[:, 0] -= min_x
+        coords[:, 1] -= min_y
+        coords[:, 2] = np.mod(coords[:, 2], math.pi / 2.0)
+
         for sid in range(n):
             rows.append({
                 "id": row_id,
                 "n": n,
                 "square_id": sid,
-                "x": repr(float(coords[sid, 0])),
-                "y": repr(float(coords[sid, 1])),
-                "angle": repr(float(coords[sid, 2])),
+                "x": float(coords[sid, 0]),
+                "y": float(coords[sid, 1]),
+                "angle": float(coords[sid, 2]),
             })
             row_id += 1
 
@@ -129,18 +177,33 @@ def main() -> int:
                         help="Path to base submission CSV")
     parser.add_argument("--candidate", type=str, default="../top_score_file.txt",
                         help="Path to candidate packings CSV/TXT")
-    parser.add_argument("--output", type=str, default="submissions/submission_v2_improved.csv",
+    parser.add_argument("--output", type=str, default="submissions/submission_improved.csv",
                         help="Path to output submission CSV")
-    parser.add_argument("--dilation", type=float, default=1e-11,
+    parser.add_argument("--dilation", type=float, default=1e-10,
                         help="Contact dilation factor for float64 safety")
+    parser.add_argument("--tolerance", type=float, default=0.0,
+                        help="Collision tolerance for SAT checks (default 0.0)")
+    parser.add_argument("--report", type=str, default=None,
+                        help="Optional path to output markdown audit report")
+    parser.add_argument("--dry-run", action="store_true",
+                        help="Evaluate merge without writing output file")
     args = parser.parse_args()
 
     repo_root = Path(__file__).resolve().parent.parent
     base_p = (repo_root / args.base).resolve()
     cand_p = (repo_root / args.candidate).resolve()
-    out_p = (repo_root / args.output).resolve()
+    out_p = (repo_root / args.output).resolve() if args.output else None
+    rep_p = (repo_root / args.report).resolve() if args.report else None
 
-    merge_packings(base_p, cand_p, out_p, dilation_factor=args.dilation)
+    merge_packings(
+        base_p,
+        cand_p,
+        out_p,
+        dilation_factor=args.dilation,
+        tolerance=args.tolerance,
+        report_path=rep_p,
+        dry_run=args.dry_run,
+    )
     return 0
 
 
