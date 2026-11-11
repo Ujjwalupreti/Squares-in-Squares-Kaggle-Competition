@@ -7,7 +7,7 @@
 [![Leaderboard Rank](<https://img.shields.io/badge/Leaderboard%20Rank-Top--Tier-blueviolet.svg>)](https://www.kaggle.com/code/ujjwalupreti/squares-in-squares-geometric-optimization)
 [![Personal Best](<https://img.shields.io/badge/Personal%20Best-22.204803-success.svg>)]()
 [![SAT Validation](<https://img.shields.io/badge/SAT%20Overlaps-0.0%20(Certified)-brightgreen.svg>)]()
-[![Tests](<https://img.shields.io/badge/tests-134%20passed-brightgreen.svg>)]()
+[![Tests](<https://img.shields.io/badge/tests-143%20passed-brightgreen.svg>)]()
 [![License](https://img.shields.io/badge/license-MIT-green.svg)]()
 
 A complete, production-grade Python computational geometry package and optimization pipeline designed for the Kaggle **Squares in Squares** competition. It features an exact Separating Axis Theorem (SAT) collision engine, multi-start simulated annealing, HiGHS Linear Programming (LP) Contact Compaction, PyTorch GPU Continuous Soft-Body Relaxation, certified multi-angle cluster packings beating published records, automated greedy merging with selective contact dilation ($\delta = 10^{-10}$), interactive visual analytics, and an audited 500,500-row submission builder.
