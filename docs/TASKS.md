@@ -148,6 +148,18 @@ Task status legend: `[ ]` not started, `[x]` complete. Do not mark tasks complet
 - [x] Canonicalize and apply safety dilation ($\delta = 10^{-10}$): shifted all packings to lower-left origin $(0, 0)$, normalized rotation angles to $[0, \pi/2)$, and applied selective radial expansion. *(Evidence: verified 0 SAT overlaps across all 1,000 puzzles at tolerance 0.0)*
 - [x] Update primary submission targets (`submissions/submission.csv`, `submissions/submission_improved.csv`) and Kaggle notebook candidate discovery. *(Evidence: certified 500,500-row CSV generated, notebook updated)*
 
+## Phase 18 — Master Multi-Portfolio Cross-Merge and Pipeline Hardening (Milestone 22.194550)
+- [x] Implement universal multi-portfolio merger engine (`scripts/master_merge.py`). *(Evidence: multi-candidate evaluation CLI and transforms)*
+- [x] Add `canonicalize_packing` and `dilate_packing` to geometry transforms with unit test coverage. *(Evidence: `tests/unit/test_transforms.py`, 146 tests green)*
+- [x] Document v1.6.0 milestone and certified audit report. *(Evidence: `audit_report_22_194550.md`)*
+
+## Phase 19 — Disqualification Remediation, Contact-Clearance Buffering, and Breakthrough to 22.179269
+- [x] Perform exhaustive KD-Tree spatial clearance audit on failed submission (`submission.csv`, scored `23.707438` on Kaggle): diagnosed 35 sub-epsilon contact penetrations ($-1.33 \times 10^{-15}$ to $-7.11 \times 10^{-15}$) triggering Kaggle's $+1.512888$ interval arithmetic fallback penalty. *(Evidence: `scratch/fast_diagnose.py` matched exact penalty gap)*
+- [x] Ingest and audit candidate dataset `submission_new.txt`: verified 0 SAT overlaps across all 1,000 puzzles, strictly non-negative clearance everywhere ($\ge 0.00\text{e}+00$), and certified positive buffers ($\ge 1.00 \times 10^{-12}$) across all 554 non-grid packings. *(Evidence: verified by independent submission auditor and cKDTree)*
+- [x] Cross-evaluate against all historical datasets: confirmed 163 strictly tighter puzzles, 0 regressions, and aggregate score reduction from `22.204803` to **`22.179269`** ($\Delta S = -0.025534$). *(Evidence: `scratch/cross_audit_all.py`)*
+- [x] Update production submission CSVs (`submissions/submission.csv`, `submissions/submission_improved.csv`, `submission_certified_22_179269.csv`) and verified SHA256 checksums. *(Evidence: matching checksum `0ff3577f...`)*
+- [x] Run full pytest suite (146/146 green) and independent submission audit (500,500 rows, 1,000 unique puzzles, 0 errors). *(Evidence: `audit_submission.py` passed)*
+
 ## Definition of done
 A task is done only when its acceptance criteria are satisfied, tests are run, and any limitations are documented. The project is submission-ready only after the final CSV passes the independent audit.
 
