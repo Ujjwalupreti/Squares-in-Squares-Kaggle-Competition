@@ -116,9 +116,10 @@ The badge `SAT Overlaps: 0.0 (Certified)` guarantees that every configuration in
 │   ├── TASKS.md                Task tracking plan with verified evidence
 │   └── score_improvement_report.md Detailed audit of optimization benchmarks
 ├── notebooks/                  Kaggle publication-ready notebooks
-│   ├── squares_in_squares.ipynb Complete self-contained notebook (scores 22.23789565 with visual analytics)
+│   ├── squares_in_squares.ipynb Complete self-contained notebook (scores 22.17926867 with CUDA/HiGHS pipeline)
 │   └── kernel-metadata.json    Kaggle CLI kernel configuration
 ├── scripts/                    Executable CLI commands
+│   ├── master_merge.py         Universal multi-portfolio merger with adaptive contact hardening
 │   ├── heavy_optimizer.py      Multi-core CPU optimizer with target puzzle filtering
 │   ├── optimize_and_merge.py   Automated greedy packing merger and contact dilation optimizer
 │   ├── optimize_transitions.py Transition boundary optimizer with SAT certification
@@ -141,10 +142,11 @@ The badge `SAT Overlaps: 0.0 (Certified)` guarantees that every configuration in
 │   ├── config.py               Configuration loading and validation
 │   └── cli.py                  Unified CLI (`squares-in-squares`)
 ├── submissions/                Submission artifacts and audit reports
-│   ├── submission_improved.csv Latest certified submission (score 22.21804358, 500,500 rows)
-│   ├── submission.csv          Active submission file (score 22.21804358)
+│   ├── submission_improved.csv Latest certified submission (score 22.17926867, 500,500 rows)
+│   ├── submission.csv          Active submission file (score 22.17926867)
+│   ├── audit_report_22_179269.md Certified audit report for milestone 22.179269
 │   └── experiments/manifest.json Experiment manifest and benchmark tracking
-└── tests/                      Pytest test suite (134 unit and integration tests)
+└── tests/                      Pytest test suite (146 unit and integration tests, 100% green)
     ├── unit/                   Unit tests for geometry, moves, packing, certified upgrades, contact LP, and validation
     └── integration/            Integration tests for baseline, solution store, checkpoints, and submissions
 ```
@@ -201,7 +203,7 @@ Auditing submission file: submissions/submission.csv (n=1..1000)...
 AUDIT PASSED!
   Total rows:      500500 (expected: 500500)
   Unique puzzles:  1000
-  Aggregate score: 22.237896
+  Aggregate score: 22.179269
   Collisions:      0
 ```
 
@@ -215,13 +217,13 @@ The complete, self-contained Jupyter notebook is published at [Squares in Square
 
 1. **Automated Dataset Discovery**: Inspects attached Kaggle datasets in `/kaggle/input/` while safely ignoring unoptimized sample submission grids.
 2. **HiGHS LP Contact Compaction**: Uses active-contact linear programming to squeeze translation coordinates into contact manifolds in milliseconds.
-3. **PyTorch GPU Soft-Body Continuous Relaxation**: Differentiable repulsive potential field optimizing $(x, y, \theta)$ simultaneously on GPU to resolve dense topological jams.
+3. **PyTorch CUDA Differentiable-SAT Continuous Relaxation**: True 4-axis SAT interpenetration barrier potentials optimizing $(x, y, \theta)$ on GPU to resolve dense topological jams.
 4. **Visual Analytics & Exploratory Data Analysis (EDA)**:
    - **Global Metric Profile**: Dual-panel plot of excess slack $\left(\frac{L_n}{\sqrt{n}} - 1\right)$ across all 1,000 puzzles and slack distribution histogram.
    - **2D Geometry Packing Visualizer**: 4-panel visual diagram for $n = 4, 5, 10, 11$, displaying tilted squares, rotation angles, and container boundaries.
    - **Interactive Function**: `plot_packing(squares, n)` to visualize any puzzle configuration on demand.
-5. **$N=5$ Safeguard & Contact Dilation**: Automatically enforces the analytical $10^{-7}$ positive clearance buffer and sub-micron radial dilation ($\delta = 10^{-10}$).
-6. **Instant Score**: Directly writes `/kaggle/working/submission.csv` scoring **`22.237896`** with zero overlap penalties.
+5. **$N=5$ Safeguard & Contact Buffering**: Automatically enforces the analytical $10^{-7}$ positive clearance buffer and sub-micron contact margins ($\delta \ge 10^{-12}$) preventing interval arithmetic disqualification.
+6. **Instant Score**: Directly writes `/kaggle/working/submission.csv` scoring **`22.179269`** with zero overlap penalties.
 
 ---
 
@@ -233,7 +235,7 @@ Run the full pytest test suite:
 python -m pytest tests/ -v
 ```
 
-- **134 tests pass (111 unit, 23 integration)**:
+- **146 tests pass (100% green)**:
   - `test_geometry.py`: Half-extents, corner formulas, axis-aligned bounds, SAT collision detection, spatial index.
   - `test_contact_lp.py`: HiGHS simplex linear programming compaction and feasibility preservation.
   - `test_pocket_insertion.py`: Pocket void scanning, insertion growth, and diagonal stripe generation.
@@ -244,12 +246,14 @@ python -m pytest tests/ -v
   - `test_optimization.py`: Simulated annealing, local search, multi-start restart orchestration.
   - `test_integration.py`: Atomic checkpoint writing, corrupted checkpoint recovery, resume semantics.
   - `test_cli.py`: Command-line interface end-to-end execution.
+  - `test_transforms.py`: Lower-left origin canonicalization and centroid dilation tests.
+  - `test_validator_perf.py`: Separation clearance, batch bounds, and audit summary verification.
 
 ---
 
-## 7. Roadmap to 22.20 & 22.14
+## 7. Roadmap to 22.15 & 22.1215
 
 1. **GPU Soft-Body Relaxation Sweeps**:
-   - Running GPU-accelerated PyTorch relaxation on candidate transition bands ($n \in [50, 500]$) on Kaggle GPU (T4/P100), followed by HiGHS LP contact snapping.
+   - Running GPU-accelerated PyTorch D-SAT relaxation on candidate transition bands ($n \in [50, 500]$) on Kaggle GPU (T4/P100), followed by HiGHS LP contact snapping.
 2. **Transition Seam Pattern Search**:
-   - Systematic search across diagonal stripe and pocket-insertion patterns for transition puzzles ($n$ immediately preceding square counts), pushing toward **`22.200000`** and the theoretical continuum limit **`22.140000`**.
+   - Systematic search across diagonal stripe and pocket-insertion patterns for transition puzzles ($n$ immediately preceding square counts), pushing toward **`22.150000`** and the theoretical continuum limit **`22.121518`**.
